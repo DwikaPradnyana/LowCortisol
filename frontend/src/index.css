@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+
+:root {
+  --font-size: 16px;
+
+  --background: #eaf3ff;
+  --foreground: #2a2e35;
+
+  --primary: #4a90e2;
+  --primary-foreground: #ffffff;
+
+  --secondary: #eef0ff;
+  --secondary-foreground: #2a2e35;
+
+  --accent: #e6faff;
+  --accent-foreground: #2a2e35;
+
+  --muted: #f3f7fc;
+  --muted-foreground: #7d8790;
+
+  --border: #e8eef5;
+
+  --radius: 1rem;
+}
+
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-border: var(--border);
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 0.25rem); /* 12px */
+  --radius-sm: calc(var(--radius) - 0.5rem);  /* 8px */
+
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+
+@layer base {
+  * {
+    @apply border-border outline-primary/50;
+  }
+
+  html {
+    font-size: var(--font-size);
+  }
+
+  body {
+    /* Gunakan utilitas Tailwind untuk font, antialiased penting untuk keterbacaan SaaS */
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
