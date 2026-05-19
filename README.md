@@ -68,8 +68,8 @@ backend/.env
 Isi:
 
 ```env
-MONGO_URI=mongodb://your_mongodb_connection
-JWT_SECRET=your_jwt_secret
+MONGO_URI=mongodb://lowcortisol_admin:cortisol2026@ac-aoljfse-shard-00-00.d54vbgb.mongodb.net:27017,ac-aoljfse-shard-00-01.d54vbgb.mongodb.net:27017,ac-aoljfse-shard-00-02.d54vbgb.mongodb.net:27017/?ssl=true&replicaSet=atlas-bvbye2-shard-0&authSource=admin&appName=LowCortisol
+JWT_SECRET='efc005e0dfd697b0b29f2c8de2824c6bdeee4dfd6d4c3ea34810ef0a537e68d87944ac8179cb78ef4b4e1f965de1c7fdd515c7b0257dafef0c7d59f4835292f4'
 PORT=5000
 ```
 
