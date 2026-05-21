@@ -19,7 +19,6 @@ export default function Dashboard() {
   const [errorMsg, setErrorMsg] = useState("");
   const [hoveredDay, setHoveredDay] = useState(null);
   
-  // State API Data terpusat (Sesuai Kontrak Data Back-End)
   const [apiData, setApiData] = useState({
     user: { name: "" },
     hasCheckedInToday: false,
@@ -32,14 +31,13 @@ export default function Dashboard() {
   useEffect(() => {
     const loadDashboard = async () => {
       try {
-        // Satu panggilan jaringan untuk mengambil seluruh agregasi data
         const response = await dashboardService.getDashboardData();
         if (response.status === 'success') {
           setApiData(response.data);
         }
       } catch (error) {
         if (error.response?.status === 401) {
-          navigate("/auth"); // Lempar ke login jika token kadaluarsa
+          navigate("/auth");
         }
         setErrorMsg("Gagal memuat data dari server. Pastikan API berjalan.");
       } finally {
@@ -84,7 +82,7 @@ export default function Dashboard() {
           <p className="mt-1 text-sm text-muted-foreground">Monitor your patterns and prevent exhaustion.</p>
         </div>
         <button 
-          onClick={() => navigate("/checkin")}
+          onClick={() => navigate("/dashboard/checkin")}
           disabled={apiData.hasCheckedInToday}
           className="w-full md:w-auto bg-foreground hover:bg-foreground/90 text-background px-6 py-3 rounded-full font-medium transition-all shadow-md flex items-center justify-center gap-2 hover:-translate-y-0.5 disabled:opacity-50 disabled:hover:translate-y-0 disabled:cursor-not-allowed"
         >
@@ -230,7 +228,7 @@ export default function Dashboard() {
             </p>
           </div>
           <Button 
-            onClick={() => navigate("/checkin")}
+            onClick={() => navigate("/dashboard/checkin")}
             disabled={apiData.hasCheckedInToday}
             size="lg" 
             className={`mt-6 w-full transition-all duration-300 ${apiData.hasCheckedInToday ? "bg-teal-50 text-teal-600 border border-teal-200 shadow-none opacity-100 cursor-default hover:bg-teal-50 hover:translate-y-0" : "shadow-md shadow-primary/20"}`}

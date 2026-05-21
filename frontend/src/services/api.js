@@ -9,7 +9,6 @@ export const apiClient = axios.create({
   },
 });
 
-// Interceptor: Menyuntikkan Bearer Token murni untuk otorisasi
 apiClient.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token'); 
@@ -36,18 +35,22 @@ export const authService = {
   }
 };
 
+export const userService = {
+  async submitOnboarding(onboardingData) {
+    const response = await apiClient.put('/users/onboarding', onboardingData);
+    return response.data;
+  }
+};
+
 export const checkinService = {
-  async submitCheckIn(workHours, sleepHours, cognitiveLoad) {
-    const response = await apiClient.post('/dashboard/checkin', {
-      workHours, sleepHours, cognitiveLoad
-    });
+  async submitCheckIn(payload) {
+    const response = await apiClient.post('/dashboard/checkin', payload);
     return response.data;
   }
 };
 
 export const dashboardService = {
   async getDashboardData() {
-    // TIDAK ADA LAGI MOCK DATA. Murni memanggil RESTful API.
     const response = await apiClient.get('/dashboard');
     return response.data;
   }

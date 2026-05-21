@@ -13,6 +13,7 @@ import Auth from './pages/Auth';
 // Halaman Private
 import Dashboard from './pages/Dashboard'; 
 import CheckIn from './pages/CheckIn';
+import Onboarding from './pages/Onboarding';
 
 function App() {
   return (
@@ -21,20 +22,21 @@ function App() {
         <Background />
         
         <Routes>
-          {/* --- RUTE PUBLIK --- */}
           <Route path="/" element={<><TopNavbar /><Home /></>} />
           <Route path="/how-it-works" element={<><TopNavbar /><HowItWorks /></>} />
           <Route path="/insights" element={<><TopNavbar /><Insights /></>} />
           <Route path="/auth" element={<><TopNavbar /><Auth /></>} />
 
-          {/* --- RUTE PRIVATE --- */}
           <Route element={<ProtectedRoute />}>
+            
+            <Route path="/onboarding" element={<Onboarding />} />
+            
             <Route element={<AppLayout />}>
               <Route path="/dashboard" element={<Dashboard />} />
-              
               <Route path="/dashboard/checkin" element={<CheckIn />} />
               <Route path="/dashboard/insights" element={<div className="p-8">Insights Page</div>} />
             </Route>
+
           </Route>
         </Routes>
       </div>

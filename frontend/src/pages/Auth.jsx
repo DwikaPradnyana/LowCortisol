@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { Sparkle, EnvelopeSimple, LockKey, User, CircleNotch } from "@phosphor-icons/react";
 import GlassCard from "../components/ui/GlassCard";
 import Button from "../components/ui/Button";
-import Logo from "../assets/logo.svg"; // Pastikan path asset tepat
-import { authService } from "../services/api"; // Menggunakan layanan Axios terpusat
+import Logo from "../assets/logo.svg";
+import { authService } from "../services/api";
 
 export default function Auth() {
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ export default function Auth() {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    setError(""); // Reset error saat user mulai mengetik ulang
+    setError("");
   };
 
   const handleSubmit = async (e) => {
@@ -44,11 +44,11 @@ export default function Auth() {
         response = await authService.register(formData.name, formData.email, formData.password);
       }
 
-      // Validasi struktur respons dari backend Express
       if (response.status === 'success' && response.data.token) {
-        // Standardisasi kunci penyimpanan menjadi "token" agar sesuai dengan ProtectedRoute
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("user_name", response.data.user.name);
+        
+        localStorage.setItem("isOnboarded", String(response.data.user.isOnboarded));
         
         navigate("/dashboard");
       } else {
@@ -56,7 +56,6 @@ export default function Auth() {
       }
 
     } catch (err) {
-      // Ekstraksi error presisi tinggi dari Axios atau error manual
       const serverError = err.response?.data?.error;
       setError(serverError || err.message || "Gagal terhubung ke server.");
     } finally {
@@ -67,7 +66,6 @@ export default function Auth() {
   return (
     <main className="mx-auto grid min-h-[calc(100vh-6rem)] w-[95%] max-w-6xl grid-cols-1 gap-8 pb-12 pt-8 md:grid-cols-2">
       
-      {/* Kolom Kiri: Visual Branding (Tetap Dipertahankan) */}
       <div className="relative hidden h-full md:block">
         <GlassCard className="relative h-full overflow-hidden p-10 bg-gradient-to-br from-white/60 to-primary/5">
           <div className="absolute -left-20 -top-20 h-72 w-72 rounded-full bg-primary/20 blur-3xl" />
@@ -77,8 +75,7 @@ export default function Auth() {
 
           <div className="relative flex h-full flex-col justify-between z-10">
             <div className="flex items-center gap-2">
-              {/* Fallback ke icon jika SVG gagal di-load */}
-              <Sparkle weight="fill" className="h-6 w-6 text-primary" />
+              <img src={Logo} alt="" />
               <span className="font-semibold text-lg text-foreground tracking-tight">LowCortisol</span>
             </div>
             <div>
@@ -93,7 +90,6 @@ export default function Auth() {
         </GlassCard>
       </div>
 
-      {/* Kolom Kanan: Form Otentikasi */}
       <GlassCard className="h-full p-8 md:p-10 shadow-lg">
         <div className="mb-8 flex rounded-full border border-slate-200 bg-slate-50/50 p-1 backdrop-blur-xl">
           {(["signin", "signup"]).map((t) => (

@@ -1,14 +1,22 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 export default function ProtectedRoute() {
-  // Mengecek apakah token 'paspor' ada di Local Storage
-  const isAuthenticated = localStorage.getItem("token") !== null;
-
-  // Jika tidak ada token, tendang kembali ke halaman otentikasi
-  if (!isAuthenticated) {
+  const location = useLocation();
+  
+  const token = localStorage.getItem("token");
+  if (!token) {
     return <Navigate to="/auth" replace />;
   }
 
-  // Jika ada token, izinkan render komponen anak (AppLayout & Dashboard)
+  const isOnboarded = localStorage.getItem("isOnboarded") === "true";
+
+  if (!isOnboarded && location.pathname !== "/onboarding") {
+    return <Navigate to="/onboarding" replace />;
+  }
+
+  if (isOnboarded && location.pathname === "/onboarding") {
+    return <Navigate to="/dashboard" replace />;
+  }
+
   return <Outlet />;
 }
