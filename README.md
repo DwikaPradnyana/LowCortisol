@@ -1,58 +1,105 @@
-# LowCortisol — Full-Stack MERN Application
+# LowCortisol — ML-Ready Workplace Wellness Platform
 
-Repositori ini telah direstrukturisasi menjadi arsitektur **MERN Stack (MongoDB, Express, React, Node.js)** yang terintegrasi secara penuh (*End-to-End*).
+LowCortisol adalah platform berbasis **MERN Stack** yang dirancang untuk mengumpulkan sinyal perilaku dan psikologis harian pengguna sebagai fondasi *ground-truth dataset* untuk analisis risiko burnout berbasis Machine Learning di masa depan.
 
-Fitur berikut telah aktif:
-- JWT Authentication
-- Protected API Routes
-- MongoDB Atlas Integration
-- Daily Check-In System
-- Reactive Dashboard Synchronization
-- Mock AI Burnout Inference
+Repositori ini telah direstrukturisasi menjadi arsitektur **End-to-End Fullstack** dengan pemisahan domain yang jelas antara:
 
-Folder `FE` lama telah dihapus untuk menghindari redundansi arsitektur. Seluruh pengembangan sekarang diisolasi ke dalam dua domain utama:
-
-- `/backend` → Express.js, MongoDB, JWT, Mongoose, AI Inference
-- `/frontend` → React.js (Vite), Tailwind CSS, Axios Interceptor
+* Frontend Experience Layer
+* Backend API Layer
+* ML-Ready Data Pipeline
 
 ---
 
-## System Requirements
+# Core Architecture
 
-Pastikan environment lokal telah memiliki:
+## Technology Stack
 
-- **Node.js v22.x LTS** *(v24 tidak direkomendasikan karena konflik DNS resolver MongoDB Atlas)*
-- NPM
-- Git
-- MongoDB Atlas Account
-- Postman / Thunder Client *(opsional untuk API testing)*
+| Layer               | Technology                                       |
+| ------------------- | ------------------------------------------------ |
+| Frontend            | React.js + Vite + Tailwind CSS                   |
+| Backend             | Node.js + Express.js                             |
+| Database            | MongoDB Atlas                                    |
+| Authentication      | JWT                                              |
+| State Communication | Axios Interceptor                                |
+| ORM                 | Mongoose                                         |
+| AI Layer            | Rule-Based Burnout Risk Simulation *(temporary)* |
 
 ---
 
-## Project Structure
+# Repository Structure
 
 ```bash
 lowcortisol-monorepo/
 │
 ├── backend/
 │   ├── src/
+│   │   ├── controllers/
+│   │   ├── middleware/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   └── utils/
+│   │
 │   ├── .env
 │   └── package.json
 │
 ├── frontend/
 │   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   └── hooks/
+│   │
 │   └── package.json
+│
+├── ml-tools/
 │
 └── README.md
 ```
 
 ---
 
-## Local Setup & Live Demo
+# System Capabilities
 
-> Jalankan **dua terminal terpisah**. Backend dan Frontend wajib aktif bersamaan.
+## Completed Features
 
-### 1. Backend Setup
+* JWT Authentication
+* Protected API Routes
+* MongoDB Atlas Integration
+* Daily Behavioral Check-In
+* Reactive Dashboard Synchronization
+* User Onboarding Guard
+* Nullable Hybrid Input Architecture
+* ML-Ready Data Collection Pipeline
+* Axios Authorization Interceptor
+* Burnout Risk Simulation
+
+---
+
+# System Requirements
+
+Recommended environment:
+
+* Node.js v22.x LTS
+* NPM
+* Git
+* MongoDB Atlas Account
+
+Optional:
+
+* Postman
+* Thunder Client
+
+---
+
+# Local Development Setup
+
+> Backend dan Frontend wajib dijalankan secara paralel menggunakan dua terminal berbeda.
+
+---
+
+# 1. Backend Setup
+
+Masuk ke folder backend:
 
 ```bash
 cd backend
@@ -69,11 +116,13 @@ Isi:
 
 ```env
 MONGO_URI=mongodb://lowcortisol_admin:cortisol2026@ac-aoljfse-shard-00-00.d54vbgb.mongodb.net:27017,ac-aoljfse-shard-00-01.d54vbgb.mongodb.net:27017,ac-aoljfse-shard-00-02.d54vbgb.mongodb.net:27017/lowcortisol_db?ssl=true&replicaSet=atlas-bvbye2-shard-0&authSource=admin&appName=LowCortisol
+
 JWT_SECRET='efc005e0dfd697b0b29f2c8de2824c6bdeee4dfd6d4c3ea34810ef0a537e68d87944ac8179cb78ef4b4e1f965de1c7fdd515c7b0257dafef0c7d59f4835292f4'
+
 PORT=5000
 ```
 
-Jalankan server:
+Jalankan backend server:
 
 ```bash
 npm run dev
@@ -82,13 +131,13 @@ npm run dev
 Expected output:
 
 ```bash
-[SERVER] Aktif di http://localhost:5000
-[DATABASE] MongoDB Terkoneksi
+[SERVER] Running at http://localhost:5000
+[DATABASE] MongoDB Connected
 ```
 
 ---
 
-### 2. Frontend Setup
+# 2. Frontend Setup
 
 Buka terminal baru:
 
@@ -106,123 +155,276 @@ http://localhost:5173
 
 ---
 
-## Authentication Flow
+# Authentication Flow
 
-### Register
+## Register
 
 ```http
 POST /api/auth/register
 ```
 
-- User tersimpan ke MongoDB Atlas
-- JWT token dibuat
-- Session tersimpan di localStorage
+Flow:
+
+* User dibuat di MongoDB
+* JWT dibuat
+* Session disimpan ke localStorage
+* User diarahkan ke onboarding
 
 ---
 
-### Login
+## Login
 
 ```http
 POST /api/auth/login
 ```
 
-- JWT diverifikasi
-- Axios Interceptor otomatis menyisipkan Bearer Token
-- User diarahkan ke Dashboard
+Flow:
+
+* JWT diverifikasi
+* Axios interceptor menyisipkan bearer token otomatis
+* Protected routes diaktifkan
+* Dashboard melakukan sinkronisasi data real-time
 
 ---
 
-## Dashboard Flow
+# User Onboarding Architecture
 
-Dashboard menggunakan:
-- Protected API Request
-- Axios Authorization Interceptor
-- Dynamic User Profile Fetching
-- Reactive Burnout Status
+Sistem onboarding digunakan untuk mengumpulkan:
 
-Endpoint utama:
+* data demografi,
+* profil pekerjaan,
+* baseline behavioral signal.
 
-```http
-GET /api/users/profile
-GET /api/dashboard
-POST /api/dashboard/checkin
+Field onboarding disimpan secara permanen pada model `User`.
+
+User yang belum onboarding akan:
+
+* diblokir dari dashboard,
+* dipaksa menyelesaikan onboarding terlebih dahulu.
+
+Flow ini dikontrol melalui:
+
+```bash
+frontend/src/components/layout/ProtectedRoute.jsx
+```
+
+dan:
+
+```bash
+backend/src/models/User.js
 ```
 
 ---
 
-## Daily Check-In Flow
+# Daily Check-In Architecture
 
-1. Login
-2. Klik `Log Daily Routine`
-3. Isi:
-   - Work Hours
-   - Sleep Duration
-   - Cognitive Load
-4. Submit Check-In
+Sistem check-in harian menggunakan pendekatan:
 
-Server akan:
-- Memproses data
-- Menjalankan Mock AI Inference
-- Mengupdate MongoDB
-- Mengirim status burnout terbaru ke Dashboard
+## Hybrid Validation Architecture
 
----
+### Mandatory Core Variables
 
-## API Endpoints
+5 variabel inti wajib diisi:
 
-| Method | Endpoint | Description |
-|---|---|---|
-| POST | `/api/auth/register` | Register user |
-| POST | `/api/auth/login` | Login & JWT generation |
-| GET | `/api/users/profile` | Protected user profile |
-| GET | `/api/dashboard` | Dashboard aggregation |
-| POST | `/api/dashboard/checkin` | Submit daily routine |
+* Work Duration
+* Sleep Duration
+* Workload Perception
+* Stress Level
+* Productivity Perception
+
+Variabel ini divalidasi secara ketat pada:
+
+* Frontend
+* Backend
+* Database Schema
 
 ---
 
-## ML / AI Integration
+### Optional Enrichment Variables
 
-Seluruh logika inferensi AI berada di:
+8 variabel tambahan bersifat nullable:
+
+* Overtime Duration
+* Screen Time
+* Meeting Frequency
+* Sleep Quality
+* Physical Complaints
+* Work Satisfaction
+* Work-Life Balance
+* Team Support
+
+Nullable strategy digunakan untuk:
+
+* menjaga explicit user intent,
+* menghindari synthetic imputation,
+* mempertahankan integritas dataset,
+* mempersiapkan pipeline supervised learning.
+
+---
+
+# UX Engineering Highlights
+
+## Single-Scroll Progressive Form
+
+Form multi-step dihapus untuk mengurangi:
+
+* interaction fatigue,
+* abandonment rate,
+* excessive navigation friction.
+
+---
+
+## Nullable Slider Strategy
+
+HTML range input standar tidak mendukung state `null`.
+
+Solusi yang diterapkan:
+
+* visual untouched state,
+* dashed container strategy,
+* explicit interaction detection,
+* reactive styling.
+
+Tujuan:
+
+* membedakan data kosong vs data valid,
+* menjaga kualitas ground-truth signal.
+
+---
+
+## Progressive Disclosure
+
+Field enrichment disembunyikan secara default dan hanya muncul ketika user membuka panel tambahan.
+
+Pendekatan ini digunakan untuk:
+
+* meningkatkan completion rate,
+* mengurangi cognitive overload,
+* menjaga fokus pada core signal collection.
+
+---
+
+# Dashboard System
+
+Dashboard bersifat reactive dan tersinkronisasi langsung dengan database.
+
+Endpoint utama:
+
+```http
+GET /api/dashboard
+```
+
+Dashboard menampilkan:
+
+* burnout status,
+* latest check-in,
+* behavioral summary,
+* dynamic user profile.
+
+---
+
+# API Endpoints
+
+| Method | Endpoint                 | Description            |
+| ------ | ------------------------ | ---------------------- |
+| POST   | `/api/auth/register`     | Register new user      |
+| POST   | `/api/auth/login`        | Login & JWT generation |
+| GET    | `/api/users/profile`     | Protected profile data |
+| PUT    | `/api/users/onboarding`  | Submit onboarding data |
+| GET    | `/api/dashboard`         | Dashboard aggregation  |
+| POST   | `/api/dashboard/checkin` | Submit daily check-in  |
+
+---
+
+# Backend Inference Layer
+
+Seluruh simulasi burnout inference saat ini berada di:
 
 ```bash
 backend/src/controllers/dashboardController.js
 ```
 
-Tim ML dapat langsung mengganti:
-- Mock inference
-- Risk scoring
-- TensorFlow model integration
-- Recommendation engine
+Arsitektur telah dipersiapkan agar tim ML dapat:
 
-tanpa mengubah arsitektur Front-End.
+* mengganti mock inference,
+* menghubungkan TensorFlow/PyTorch model,
+* menambahkan recommendation engine,
+* membuat scoring pipeline,
+* membangun prediction service
 
----
-
-## Security Notes
-
-Jangan pernah upload:
-- `.env`
-- JWT Secret
-- MongoDB Credentials
-- API Keys
-
-File sensitif telah diproteksi menggunakan `.gitignore`.
+tanpa mengubah arsitektur frontend.
 
 ---
 
-## Current MVP Status
+# ML Pipeline Readiness
 
-### Completed
-- MERN Architecture
-- JWT Authentication
-- MongoDB Atlas
-- Protected Routes
-- Axios Interceptor
-- Daily Check-In
-- Reactive Dashboard
+Repositori ini belum menggunakan model ML production.
 
-### In Progress
-- Real ML Model Integration
-- Historical Analytics
-- Burnout Visualization
-- Deployment Pipeline
+Namun arsitektur telah dipersiapkan untuk:
+
+* supervised learning,
+* behavioral analytics,
+* time-series analysis,
+* burnout risk prediction,
+* psychological signal processing.
+
+Fokus fase MVP saat ini adalah:
+
+> pengumpulan dataset yang bersih dan konsisten.
+
+---
+
+# Security Notes
+
+File berikut tidak boleh diunggah ke repository publik:
+
+* `.env`
+* API Keys
+* MongoDB Credentials
+* JWT Secret
+
+Gunakan `.gitignore` untuk melindungi file sensitif.
+
+---
+
+# Current Development Status
+
+## Completed
+
+* MERN Monorepo Architecture
+* JWT Authentication
+* MongoDB Atlas Integration
+* Protected Route System
+* User Onboarding Flow
+* Daily Check-In Pipeline
+* Reactive Dashboard
+* Hybrid Validation Architecture
+* Nullable Input System
+* Burnout Risk Simulation
+
+---
+
+## In Progress
+
+* Historical Analytics
+* Burnout Trend Visualization
+* ML Model Integration
+* Recommendation Engine
+* Data Export Pipeline
+* Deployment Infrastructure
+
+---
+
+# Engineering Direction
+
+LowCortisol tidak hanya berfokus pada visual dashboard, tetapi pada rekayasa:
+
+* behavioral data integrity,
+* scalable wellness architecture,
+* dan machine-learning-ready signal collection.
+
+Tujuan jangka panjang sistem ini adalah membangun pipeline analitik burnout berbasis data perilaku harian yang dapat digunakan untuk:
+
+* prediksi risiko,
+* rekomendasi personal,
+* dan monitoring kesejahteraan kerja secara proaktif.
