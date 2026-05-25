@@ -20,24 +20,37 @@ LowCortisol terdiri dari 3 service utama yang berjalan secara paralel:
 
 # Repository Structure
 
-```bash
+````bash
 lowcortisol-monorepo/
-│
-├── frontend/
-│   ├── src/
-│   └── package.json
 │
 ├── backend/
 │   ├── src/
+│   │   ├── controllers/
+│   │   ├── middlewares/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   └── utils/
+│   │
 │   ├── .env
+│   └── package.json
+│
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   └── hooks/
+│   │
 │   └── package.json
 │
 ├── ml-service/
 │   ├── app/
-│   ├── models/
-│   ├── artifacts/
-│   ├── venv/
-│   └── requirements.txt
+│   │   ├── models/
+│   │   └── main.py
+│   ├── requirements.txt
+│   ├── .env
+│   └── venv/
 │
 └── README.md
 ```
