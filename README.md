@@ -10,17 +10,17 @@ Platform ini telah berevolusi dari simulasi burnout sederhana menjadi arsitektur
 
 LowCortisol terdiri dari 3 service utama yang berjalan secara paralel:
 
-| Layer | Technology | Responsibility |
-|---|---|---|
-| Frontend | React + Vite + Tailwind | User Interface & Interaction |
-| Backend API | Node.js + Express + MongoDB | Authentication, API, Database |
-| ML Service | FastAPI + TensorFlow + Scikit-Learn | Burnout Prediction Engine |
+| Layer       | Technology                          | Responsibility                |
+| ----------- | ----------------------------------- | ----------------------------- |
+| Frontend    | React + Vite + Tailwind CSS         | User Interface & Interaction  |
+| Backend API | Node.js + Express.js + MongoDB      | Authentication, API, Database |
+| ML Service  | FastAPI + TensorFlow + Scikit-Learn | Burnout Prediction Engine     |
 
 ---
 
 # Repository Structure
 
-````bash
+```bash
 lowcortisol-monorepo/
 │
 ├── backend/
@@ -48,6 +48,7 @@ lowcortisol-monorepo/
 │   ├── app/
 │   │   ├── models/
 │   │   └── main.py
+│   │
 │   ├── requirements.txt
 │   ├── .env
 │   └── venv/
@@ -61,18 +62,18 @@ lowcortisol-monorepo/
 
 ## Completed Features
 
-- JWT Authentication
-- Protected Routes
-- MongoDB Atlas Integration
-- User Onboarding System
-- Daily Behavioral Check-In
-- Reactive Dashboard
-- ML Inference Integration
-- FastAPI Prediction Service
-- TensorFlow Burnout Classification
-- Axios Authorization Interceptor
-- Insight Recommendation Engine
-- ML-Ready Dataset Pipeline
+* JWT Authentication
+* Protected Routes
+* MongoDB Atlas Integration
+* User Onboarding System
+* Daily Behavioral Check-In
+* Reactive Dashboard
+* ML Inference Integration
+* FastAPI Prediction Service
+* TensorFlow Burnout Classification
+* Axios Authorization Interceptor
+* Insight Recommendation Engine
+* ML-Ready Dataset Pipeline
 
 ---
 
@@ -80,38 +81,36 @@ lowcortisol-monorepo/
 
 ## Required Software
 
-| Software | Recommended Version |
-|---|---|
-| Node.js | v22.x LTS |
-| Python | 3.11+ |
-| Git | Latest |
-| MongoDB Atlas Account | Required |
+| Software              | Recommended Version |
+| --------------------- | ------------------- |
+| Node.js               | v22.x LTS           |
+| Python                | 3.11+               |
+| Git                   | Latest              |
+| MongoDB Atlas Account | Required            |
 
 ---
 
-# IMPORTANT SYSTEM ARCHITECTURE
+# Important System Architecture
 
 Untuk menjalankan website secara penuh, **SELURUH SERVICE WAJIB AKTIF SECARA BERSAMAAN**.
 
-Artinya:
-
-| Service | Port |
-|---|---|
-| Frontend | `5173` |
-| Backend | `5000` |
+| Service    | Port   |
+| ---------- | ------ |
+| Frontend   | `5173` |
+| Backend    | `5000` |
 | ML Service | `8000` |
 
-Jika salah satu mati:
+Jika salah satu service mati:
 
-- frontend tidak bisa request data,
-- backend gagal inference,
-- model ML tidak bisa melakukan prediksi.
+* frontend tidak dapat request data,
+* backend gagal inference,
+* model ML tidak dapat melakukan prediksi.
 
 ---
 
-# FULL LOCAL DEVELOPMENT SETUP
+# Full Local Development Setup
 
-# 1. Clone Repository
+## 1. Clone Repository
 
 ```bash
 git clone <repository-url>
@@ -128,15 +127,11 @@ cd lowcortisol-monorepo
 cd backend
 ```
 
----
-
 ## Install dependencies
 
 ```bash
 npm install
 ```
-
----
 
 ## Buat file `.env`
 
@@ -156,9 +151,7 @@ PORT=5000
 JWT_SECRET='efc005e0dfd697b0b29f2c8de2824c6bdeee4dfd6d4c3ea34810ef0a537e68d87944ac8179cb78ef4b4e1f965de1c7fdd515c7b0257dafef0c7d59f4835292f4'
 ```
 
----
-
-## Jalankan Backend
+## Jalankan backend
 
 ```bash
 npm run dev
@@ -183,15 +176,11 @@ Masuk ke folder frontend:
 cd frontend
 ```
 
----
-
 ## Install dependencies
 
 ```bash
 npm install
 ```
-
----
 
 ## Jalankan frontend
 
@@ -219,25 +208,23 @@ cd ml-service
 
 ---
 
-# Python Virtual Environment Setup
+## Python Virtual Environment Setup
 
-## Buat virtual environment
+### Buat virtual environment
 
 ```bash
 python -m venv venv
 ```
 
----
+### Aktifkan virtual environment
 
-## Aktifkan virtual environment
-
-### Windows
+#### Windows
 
 ```bash
 venv\Scripts\activate
 ```
 
-### Mac/Linux
+#### Mac/Linux
 
 ```bash
 source venv/bin/activate
@@ -252,8 +239,6 @@ pip install -r requirements.txt
 ```
 
 ---
-
-# ML Service Environment File
 
 ## Buat file `.env`
 
@@ -273,7 +258,7 @@ PORT=8000
 
 ---
 
-# Jalankan ML Service
+## Jalankan ML Service
 
 ```bash
 uvicorn app.main:app --reload
@@ -288,19 +273,19 @@ Application startup complete.
 
 ---
 
-# IMPORTANT EXECUTION FLOW
+# Important Execution Flow
 
 Website hanya berjalan penuh jika:
 
-✅ Frontend aktif  
-✅ Backend aktif  
-✅ ML Service aktif
+* ✅ Frontend aktif
+* ✅ Backend aktif
+* ✅ ML Service aktif
 
 Artinya harus ada:
 
-- Terminal Frontend
-- Terminal Backend
-- Terminal ML Service
+1. Terminal Frontend
+2. Terminal Backend
+3. Terminal ML Service
 
 secara bersamaan.
 
@@ -310,17 +295,17 @@ secara bersamaan.
 
 ```text
 React Frontend
-      ↓
+↓
 Node.js Backend API
-      ↓
+↓
 FastAPI ML Service
-      ↓
+↓
 TensorFlow Model
-      ↓
+↓
 Prediction Response
-      ↓
+↓
 MongoDB Storage
-      ↓
+↓
 Dashboard Rendering
 ```
 
@@ -336,10 +321,10 @@ POST /api/auth/register
 
 Flow:
 
-- User dibuat di MongoDB
-- JWT dibuat
-- Session disimpan ke localStorage
-- User diarahkan ke onboarding
+* User dibuat di MongoDB
+* JWT dibuat
+* Session disimpan ke localStorage
+* User diarahkan ke onboarding
 
 ---
 
@@ -351,10 +336,10 @@ POST /api/auth/login
 
 Flow:
 
-- JWT diverifikasi
-- Axios interceptor menyisipkan bearer token otomatis
-- Protected routes diaktifkan
-- Dashboard sinkronisasi otomatis
+* JWT diverifikasi
+* Axios interceptor menyisipkan bearer token otomatis
+* Protected routes diaktifkan
+* Dashboard sinkronisasi otomatis
 
 ---
 
@@ -362,9 +347,9 @@ Flow:
 
 Sistem onboarding mengumpulkan:
 
-- data demografi,
-- profil pekerjaan,
-- behavioral baseline.
+* data demografi,
+* profil pekerjaan,
+* behavioral baseline.
 
 Semua field onboarding disimpan langsung pada model:
 
@@ -378,10 +363,10 @@ backend/src/models/User.js
 
 Check-in harian mengumpulkan:
 
-- workload signal,
-- stress signal,
-- recovery signal,
-- behavioral fatigue signal.
+* workload signal,
+* stress signal,
+* recovery signal,
+* behavioral fatigue signal.
 
 Data dikirim dari:
 
@@ -403,10 +388,10 @@ backend/src/services/mlService.js
 
 Tugas:
 
-- membentuk payload,
-- validasi field,
-- fallback handling,
-- request ke FastAPI.
+* membentuk payload,
+* validasi field,
+* fallback handling,
+* request ke FastAPI.
 
 ---
 
@@ -420,11 +405,11 @@ POST /predict
 
 FastAPI menerima:
 
-- 27 fitur perilaku,
-- preprocessing,
-- encoding,
-- scaling,
-- inference TensorFlow.
+* 27 fitur perilaku,
+* preprocessing,
+* encoding,
+* scaling,
+* inference TensorFlow.
 
 ---
 
@@ -454,10 +439,10 @@ lowcortisol_db
 
 # Main Collections
 
-| Collection | Purpose |
-|---|---|
-| users | Authentication + onboarding |
-| checkins | Daily behavioral signals |
+| Collection | Purpose                     |
+| ---------- | --------------------------- |
+| users      | Authentication + onboarding |
+| checkins   | Daily behavioral signals    |
 
 ---
 
@@ -483,22 +468,22 @@ workload
 
 Karena akan merusak:
 
-- OneHotEncoder
-- preprocessing pipeline
-- ML inference contract
+* OneHotEncoder
+* preprocessing pipeline
+* ML inference contract
 
 ---
 
 # API Endpoints
 
-| Method | Endpoint | Description |
-|---|---|---|
-| POST | `/api/auth/register` | Register |
-| POST | `/api/auth/login` | Login |
-| PUT | `/api/users/onboarding` | Submit onboarding |
-| GET | `/api/users/profile` | User profile |
-| GET | `/api/dashboard` | Dashboard aggregation |
-| POST | `/api/dashboard/checkin` | Submit check-in |
+| Method | Endpoint                 | Description           |
+| ------ | ------------------------ | --------------------- |
+| POST   | `/api/auth/register`     | Register              |
+| POST   | `/api/auth/login`        | Login                 |
+| PUT    | `/api/users/onboarding`  | Submit onboarding     |
+| GET    | `/api/users/profile`     | User profile          |
+| GET    | `/api/dashboard`         | Dashboard aggregation |
+| POST   | `/api/dashboard/checkin` | Submit check-in       |
 
 ---
 
@@ -520,27 +505,27 @@ Gunakan `.gitignore`.
 
 ## Completed
 
-- MERN Architecture
-- JWT Authentication
-- MongoDB Atlas Integration
-- FastAPI ML Integration
-- TensorFlow Burnout Prediction
-- Daily Check-In Pipeline
-- Reactive Dashboard
-- Insight Recommendation Engine
-- ML Contract Synchronization
+* MERN Architecture
+* JWT Authentication
+* MongoDB Atlas Integration
+* FastAPI ML Integration
+* TensorFlow Burnout Prediction
+* Daily Check-In Pipeline
+* Reactive Dashboard
+* Insight Recommendation Engine
+* ML Contract Synchronization
 
 ---
 
 ## In Progress
 
-- Historical Analytics
-- Trend Visualization
-- Recommendation Personalization
-- Time-Series Burnout Analysis
-- Deployment Infrastructure
-- Dockerization
-- CI/CD Pipeline
+* Historical Analytics
+* Trend Visualization
+* Recommendation Personalization
+* Time-Series Burnout Analysis
+* Deployment Infrastructure
+* Dockerization
+* CI/CD Pipeline
 
 ---
 
@@ -550,17 +535,17 @@ LowCortisol tidak hanya berfokus pada visual dashboard.
 
 Platform ini dirancang untuk:
 
-- behavioral signal integrity,
-- machine-learning-ready datasets,
-- scalable wellness analytics,
-- burnout prediction infrastructure.
+* behavioral signal integrity,
+* machine-learning-ready datasets,
+* scalable wellness analytics,
+* burnout prediction infrastructure.
 
 Tujuan jangka panjang:
 
-- burnout prediction,
-- proactive mental wellness monitoring,
-- behavioral recommendation system,
-- workplace psychological analytics.
+* burnout prediction,
+* proactive mental wellness monitoring,
+* behavioral recommendation system,
+* workplace psychological analytics.
 
 ---
 
@@ -570,11 +555,11 @@ Jika terjadi error inference:
 
 Pastikan:
 
-✅ Backend aktif  
-✅ ML Service aktif  
-✅ Port 8000 berjalan  
-✅ Model TensorFlow berhasil dimuat  
-✅ `.env` sudah benar
+* ✅ Backend aktif
+* ✅ ML Service aktif
+* ✅ Port 8000 berjalan
+* ✅ Model TensorFlow berhasil dimuat
+* ✅ `.env` sudah benar
 
 ---
 
