@@ -4,7 +4,8 @@ import {
   Briefcase, MoonStars, Brain, Check, Spinner, 
   Smiley, SmileyMeh, SmileySad, WarningCircle, 
   Monitor, Users, Heart, CaretDown, CaretUp,
-  BatteryCharging, Star, ShieldCheck
+  BatteryCharging, Star, ShieldCheck,
+  Barbell, Target, Clock // FIX: Tambahan ikon yang relevan secara UX
 } from "@phosphor-icons/react";
 import GlassCard from "../components/ui/GlassCard";
 import { checkinService, dashboardService } from "../services/api";
@@ -30,7 +31,10 @@ export default function CheckIn() {
     keluhan_fisik_utama: null,
     kepuasan_kerja: null,
     work_life_balance: null,
-    dukungan_atasan: null
+    dukungan_atasan: null,
+    // FIX: Mengamankan state agar tidak memicu error Uncontrolled Input di React
+    frekuensi_olahraga_per_minggu: null, 
+    jumlah_deadline_per_minggu: null
   });
 
   useEffect(() => {
@@ -204,10 +208,16 @@ export default function CheckIn() {
           
           {isAdvancedOpen && (
             <div className="p-4 sm:p-5 border-t border-slate-200 bg-slate-50/30 space-y-5 animate-in fade-in duration-300">
-              <NullableSlider field="jam_lembur_per_hari" label="Ada tambahan waktu lembur?" icon={Heart} min={0} max={8} step={1} def={2} unit="Jam" />
+              
+              {/* FIX: Ikon lembur diganti menjadi Clock dari sebelumnya Heart */}
+              <NullableSlider field="jam_lembur_per_hari" label="Ada tambahan waktu lembur?" icon={Clock} min={0} max={8} step={1} def={2} unit="Jam" />
               <NullableSlider field="jam_layar_per_hari" label="Berapa lama menatap layar?" icon={Monitor} min={0} max={16} step={1} def={8} unit="Jam" />
               <NullableSlider field="frekuensi_meeting_per_hari" label="Jumlah meeting hari ini" icon={Users} min={0} max={10} step={1} def={3} unit="Kali" />
               
+              {/* IMPLEMENTASI: Dua Parameter Baru Sesuai Kontrak ML */}
+              <NullableSlider field="frekuensi_olahraga_per_minggu" label="Frekuensi olahraga minggu ini" icon={Barbell} min={0} max={7} step={1} def={1} unit="Kali" />
+              <NullableSlider field="jumlah_deadline_per_minggu" label="Jumlah tenggat waktu (deadline) minggu ini" icon={Target} min={0} max={15} step={1} def={2} unit="Tugas" />
+
               <div className={`p-4 rounded-xl transition-all duration-300 ${formData.keluhan_fisik_utama !== null ? "border border-slate-200 bg-white shadow-sm" : "border border-slate-300 border-dashed bg-slate-50/50"}`}>
                 <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-3">
                   <BatteryCharging size={18} weight={formData.keluhan_fisik_utama ? "fill" : "regular"} className={formData.keluhan_fisik_utama ? "text-primary" : "text-slate-400"} />

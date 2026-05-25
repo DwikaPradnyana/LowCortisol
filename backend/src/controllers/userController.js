@@ -5,7 +5,7 @@ const User = require('../models/User');
 // @access  Private
 exports.getUserProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user._id).select('-password');
+    const user = await User.findById(req.user._id).select('-password_hash');
     
     if (user) {
       res.status(200).json({
@@ -46,10 +46,10 @@ exports.submitOnboarding = async (req, res) => {
         jenis_kelamin, usia, pendidikan_terakhir, status_pernikahan,
         departemen, lama_bekerja_tahun, tipe_perusahaan, status_wfh,
         status_merokok, riwayat_kesehatan_mental, keamanan_pekerjaan, frekuensi_konflik_kerja,
-        isOnboarded: true
+        onboarding_completed: true
       },
       { new: true, runValidators: true } 
-    ).select('-password');
+    ).select('-password_hash');
 
     if (updatedUser) {
       res.status(200).json({

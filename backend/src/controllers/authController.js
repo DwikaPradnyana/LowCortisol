@@ -2,10 +2,9 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-// Mengubah ID User menjadi Token Sesi
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: '7d', // Token berlaku selama 7 hari
+    expiresIn: '7d',
   });
 };
 
@@ -30,14 +29,16 @@ exports.registerUser = async (req, res) => {
     const user = await User.create({
       name,
       email,
-      password: hashedPassword,
+      password_hash: hashedPassword, 
     });
 
     if (user) {
+      const userData = { _id: user._id, name: user.name, email: user.email, role: user.role, onboarding_completed: user.onboarding_completed };
+      
       res.status(201).json({
         status: 'success',
         data: {
-          user,
+          user: userData,
           token: generateToken(user._id),
         }
       });
@@ -59,11 +60,13 @@ exports.loginUser = async (req, res) => {
 
     const user = await User.findOne({ email });
 
-    if (user && (await bcrypt.compare(password, user.password))) {
+    if (user && (await bcrypt.compare(password, user.password_hash))) {
+      const userData = { _id: user._id, name: user.name, email: user.email, role: user.role, onboarding_completed: user.onboarding_completed };
+
       res.status(200).json({
         status: 'success',
         data: {
-          user,
+          user: userData,
           token: generateToken(user._id),
         }
       });

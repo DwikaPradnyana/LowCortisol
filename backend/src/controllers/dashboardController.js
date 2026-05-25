@@ -17,30 +17,25 @@ const getStrictTodayDate = (offsetDays = 0) => {
   return `${year}-${month}-${day}`;
 };
 
+// @desc    Submit Daily Check-In
+// @route   POST /api/dashboard/checkin
 exports.submitCheckIn = async (req, res) => {
   try {
     const payload = req.body;
     const userId = req.user._id;
     const today = getStrictTodayDate();
-    const kerja = Number(payload.jam_kerja_per_hari);
-    const tidur = Number(payload.jam_tidur_per_hari);
-    const stres = Number(payload.tingkat_stres);
-    const produktivitas = Number(payload.produktivitas_diri);
-    const beban = payload.beban_kerja_persepsi;
-
-    if (
-      isNaN(kerja) || isNaN(tidur) || isNaN(stres) || isNaN(produktivitas) || 
-      !['Ringan', 'Sedang', 'Berat', 'Sangat Berat'].includes(beban)
-    ) {
-      return res.status(400).json({ error: 'Payload tidak valid atau tipe data salah.' });
-    }
-
     const existingCheckIn = await CheckIn.findOne({ user: userId, date: today });
     if (existingCheckIn) {
       return res.status(400).json({ error: 'Check-In untuk hari ini sudah direkam.' });
     }
 
-    const riskLabel = await classifyBurnoutRisk(payload);
+    const userProfile = await User.findById(userId);
+    if (!userProfile || !userProfile.onboarding_completed) {
+      return res.status(403).json({ error: 'Akses ditolak. Selesaikan Onboarding Profil Anda terlebih dahulu.' });
+    }
+
+    const riskLabel = await classifyBurnoutRisk(userProfile, payload);
+
     const { todayStatus } = generateDailyInsight(riskLabel, payload, payload);
 
     const checkInData = {
@@ -67,13 +62,15 @@ exports.submitCheckIn = async (req, res) => {
     }
     if (error.name === 'ValidationError') {
       const messages = Object.values(error.errors).map(val => val.message);
-      return res.status(400).json({ error: 'Validasi Gagal', detail: messages });
+      return res.status(400).json({ error: 'Payload Check-In tidak sesuai kontrak ML', detail: messages });
     }
     console.error("[Submit CheckIn Error]:", error);
     return res.status(500).json({ error: 'Gagal memproses Check-In', detail: error.message });
   }
 };
 
+// @desc    Get Dashboard Data
+// @route   GET /api/dashboard
 exports.getDashboardData = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -84,6 +81,7 @@ exports.getDashboardData = async (req, res) => {
 
     const todayRecord = await CheckIn.findOne({ user: userId, date: today });
     const hasCheckedInToday = !!todayRecord;
+    
     const sevenDaysAgo = getStrictTodayDate(-6);
     const pastRecords = await CheckIn.find({ 
       user: userId,

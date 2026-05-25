@@ -154,7 +154,7 @@ export default function AppLayout() {
 
             {/* Profile Dropdown */}
             {isMenuOpen && (
-              <div className="absolute right-0 top-14 w-56 origin-top-right rounded-2xl border border-white/60 bg-white/80 p-2 backdrop-blur-2xl shadow-xl animate-in fade-in zoom-in-95">
+              <div className="absolute right-0 top-14 w-56 origin-top-right rounded-2xl border border-white/60 bg-white/100 p-2 backdrop-blur-2xl shadow-xl animate-in fade-in zoom-in-95">
                 <div className="px-3 py-2">
                   <div className="text-sm font-semibold text-foreground">Amelia Reyes</div>
                   <div className="text-xs text-muted-foreground">amelia@lowcortisol.app</div>
