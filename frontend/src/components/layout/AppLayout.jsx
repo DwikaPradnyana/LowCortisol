@@ -1,18 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation, Outlet, useNavigate } from "react-router-dom";
 import {
-  SquaresFour,
-  Heartbeat,
-  TrendUp,
-  Leaf,
-  ChatsCircle,
-  ClockCounterClockwise,
-  Gear,
-  Question,
-  Bell,
-  Sparkle,
-  SignOut,
-  User
+  SquaresFour, Heartbeat, TrendUp, Leaf, ChatsCircle, ClockCounterClockwise, Gear, Question, Bell, Sparkle, SignOut, User
 } from "@phosphor-icons/react";
 import sidebarLogo from "../../assets/logo.png";
 
@@ -20,11 +9,13 @@ export default function AppLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const userName = localStorage.getItem("user_name") || "User Profile";
 
-  // Simulasi Logout: Menghapus token dan mengarahkan ke Auth
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate("/auth");
+    localStorage.removeItem("isOnboarded");
+    localStorage.removeItem("user_name");
+    navigate("/auth", { replace: true });
   };
 
   const navItems = [
@@ -40,17 +31,13 @@ export default function AppLayout() {
     { id: "help", path: "/dashboard/help", label: "Help", Icon: Question },
   ];
 
-  // Ekstrak nama halaman untuk Topbar
   const currentPage = navItems.find((item) => location.pathname === item.path)?.label || "Dashboard";
 
   return (
-    // Kontainer utama: Menggunakan h-screen dengan padding untuk efek floating
     <div className="flex h-screen w-full overflow-hidden p-4 md:p-6 gap-6 bg-transparent">
       
-      {/* 1. FLOATING SIDEBAR */}
       <aside className="hidden w-64 shrink-0 flex-col justify-between rounded-[2rem] border border-white/60 bg-white/40 p-6 backdrop-blur-xl shadow-lg md:flex">
         <div>
-          {/* Logo */}
           <Link to="/" className="mb-10 flex items-center gap-3 px-2">
 
             <div className="flex h-10 w-10 items-center justify-center shrink-0">
@@ -67,7 +54,6 @@ export default function AppLayout() {
 
           </Link>
 
-          {/* Navigasi Utama */}
           <nav className="space-y-2">
             {navItems.map(({ path, label, Icon, primary }) => {
               const isActive = location.pathname === path;
@@ -108,7 +94,6 @@ export default function AppLayout() {
           </nav>
         </div>
 
-        {/* Navigasi Bawah */}
         <nav className="space-y-2">
           {bottomNavItems.map(({ path, label, Icon }) => {
             const isActive = location.pathname === path;
@@ -130,38 +115,40 @@ export default function AppLayout() {
         </nav>
       </aside>
 
-      {/* 2. MAIN CONTENT AREA (Kanan) */}
       <div className="flex min-w-0 flex-1 flex-col gap-6">
         
-        {/* FLOATING TOPBAR */}
         <header className="flex h-16 shrink-0 items-center justify-between rounded-full border border-white/60 bg-white/40 px-6 backdrop-blur-xl shadow-sm z-20">
           <h2 className="text-sm font-semibold text-muted-foreground">{currentPage}</h2>
           
           <div className="flex items-center gap-4 relative">
-            {/* Notifikasi */}
             <button className="relative rounded-full border border-white/60 bg-white/50 p-2 transition-all hover:bg-white/80 hover:shadow-sm">
               <Bell className="h-5 w-5 text-muted-foreground" weight="bold" />
               <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-orange-400 border border-white" />
             </button>
 
-            {/* Profile Menu Toggle */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-indigo-400 to-primary text-white font-bold shadow-md ring-2 ring-white/50 hover:ring-white transition-all"
             >
-              A
+              {userName.charAt(0).toUpperCase()}
             </button>
 
-            {/* Profile Dropdown */}
             {isMenuOpen && (
               <div className="absolute right-0 top-14 w-56 origin-top-right rounded-2xl border border-white/60 bg-white/100 p-2 backdrop-blur-2xl shadow-xl animate-in fade-in zoom-in-95">
                 <div className="px-3 py-2">
-                  <div className="text-sm font-semibold text-foreground">Amelia Reyes</div>
-                  <div className="text-xs text-muted-foreground">amelia@lowcortisol.app</div>
+                  <div className="text-sm font-semibold text-foreground">{userName}</div>
+                  <div className="text-xs text-muted-foreground">User Account</div>
                 </div>
                 <div className="my-1 h-px bg-slate-200/50" />
-                <button className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-white">
-                  <User weight="bold" className="h-4 w-4" /> Profile
+                <button
+                  onClick={() => {
+                    navigate("/dashboard/settings");
+                    setIsMenuOpen(false);
+                  }}
+                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-white"
+                >
+                  <User weight="bold" className="h-4 w-4" />
+                  Profile
                 </button>
                 <button 
                   onClick={handleLogout}
@@ -174,8 +161,6 @@ export default function AppLayout() {
           </div>
         </header>
 
-        {/* BENTO GRID INJECTION AREA (Scrollable) */}
-        {/* Tidak ada background kaca di sini. Outlet (komponen Dashboard) akan mengisinya */}
         <div className="flex-1 overflow-y-auto pb-6 relative z-10">
           <Outlet />
         </div>

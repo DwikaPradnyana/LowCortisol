@@ -67,3 +67,48 @@ exports.submitOnboarding = async (req, res) => {
     res.status(500).json({ error: 'Gagal memproses data onboarding', detail: error.message });
   }
 };
+
+// @desc    Update profile user
+// @route   PUT /api/users/profile
+// @access  Private
+exports.updateProfile = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    const {
+      name,
+      departemen,
+      status_wfh
+    } = req.body;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        name,
+        departemen,
+        status_wfh
+      },
+      {
+        new: true,
+        runValidators: true
+      }
+    ).select('-password_hash');
+
+    if (updatedUser) {
+      res.status(200).json({
+        status: 'success',
+        data: updatedUser
+      });
+    } else {
+      res.status(404).json({
+        error: 'User tidak ditemukan'
+      });
+    }
+
+  } catch (error) {
+    res.status(500).json({
+      error: 'Gagal update profile',
+      detail: error.message
+    });
+  }
+};

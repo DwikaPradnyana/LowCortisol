@@ -1,26 +1,47 @@
-import { ClipboardText, Sparkle, Leaf } from "@phosphor-icons/react";
+import {
+  ClipboardText,
+  Sparkle,
+  Leaf,
+} from "@phosphor-icons/react";
 
 export const HOW_IT_WORKS_STEPS = [
   {
     n: "01",
+
     Icon: ClipboardText,
-    title: "Daily Check-in",
-    desc: "Log your mood and energy in under 10 seconds. Nothing more is asked.",
-    theme: "blue", // Akan dipetakan ke warna primary di komponen
+
+    title: "Check-in Harian",
+
+    desc:
+      "Isi kondisi harianmu dalam beberapa detik — mulai dari energi, beban aktivitas, hingga kualitas istirahat.",
+
+    theme: "blue",
   },
+
   {
     n: "02",
+
     Icon: Sparkle,
-    title: "Smart Insights",
-    desc: "Gentle AI spots early patterns and quietly surfaces what matters.",
-    theme: "purple", // Akan dipetakan ke indigo/violet
+
+    title: "Analisis Pola",
+
+    desc:
+      "LowCortisol mempelajari pola perilaku dan mendeteksi tanda-tanda stres berlebih sebelum burnout terjadi.",
+
+    theme: "purple",
   },
+
   {
     n: "03",
+
     Icon: Leaf,
-    title: "Better Recovery",
-    desc: "Receive small, kind suggestions that fit your real life.",
-    theme: "teal", // Akan dipetakan ke accent/teal
+
+    title: "Insight & Recovery",
+
+    desc:
+      "Dapatkan insight personal dan rekomendasi ringan yang membantu menjaga ritme kerja tetap sehat dan stabil.",
+
+    theme: "teal",
   },
 ];
 

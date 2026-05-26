@@ -5,7 +5,7 @@ import {
   Smiley, SmileyMeh, SmileySad, WarningCircle, 
   Monitor, Users, Heart, CaretDown, CaretUp,
   BatteryCharging, Star, ShieldCheck,
-  Barbell, Target, Clock // FIX: Tambahan ikon yang relevan secara UX
+  Barbell, Target, Clock
 } from "@phosphor-icons/react";
 import GlassCard from "../components/ui/GlassCard";
 import { checkinService, dashboardService } from "../services/api";
@@ -32,7 +32,6 @@ export default function CheckIn() {
     kepuasan_kerja: null,
     work_life_balance: null,
     dukungan_atasan: null,
-    // FIX: Mengamankan state agar tidak memicu error Uncontrolled Input di React
     frekuensi_olahraga_per_minggu: null, 
     jumlah_deadline_per_minggu: null
   });
@@ -84,7 +83,21 @@ export default function CheckIn() {
         setTimeout(() => navigate("/dashboard"), 1000);
       }
     } catch (err) {
-      const message = err.response?.data?.error || "Gagal menyimpan jurnal.";
+      let message = "Gagal menyimpan jurnal. Silakan coba lagi.";
+      
+      const serverDetail = err.response?.data?.detail;
+      const serverError = err.response?.data?.error;
+
+      if (serverDetail === "AI_SERVICE_UNAVAILABLE" || serverError === "AI_SERVICE_UNAVAILABLE" || err.message === "AI_SERVICE_UNAVAILABLE") {
+        message = "Mesin Analisis AI sedang offline atau dalam pemeliharaan. Kami menunda penyimpanan agar data Anda tidak dianalisis secara keliru. Mohon coba beberapa saat lagi.";
+      } 
+      else if (Array.isArray(serverDetail)) {
+        message = serverDetail.join(", ");
+      } 
+      else if (serverError) {
+        message = serverError;
+      }
+
       setErrorMsg(message);
       setIsSubmitting(false);
     }
@@ -209,12 +222,10 @@ export default function CheckIn() {
           {isAdvancedOpen && (
             <div className="p-4 sm:p-5 border-t border-slate-200 bg-slate-50/30 space-y-5 animate-in fade-in duration-300">
               
-              {/* FIX: Ikon lembur diganti menjadi Clock dari sebelumnya Heart */}
               <NullableSlider field="jam_lembur_per_hari" label="Ada tambahan waktu lembur?" icon={Clock} min={0} max={8} step={1} def={2} unit="Jam" />
               <NullableSlider field="jam_layar_per_hari" label="Berapa lama menatap layar?" icon={Monitor} min={0} max={16} step={1} def={8} unit="Jam" />
               <NullableSlider field="frekuensi_meeting_per_hari" label="Jumlah meeting hari ini" icon={Users} min={0} max={10} step={1} def={3} unit="Kali" />
               
-              {/* IMPLEMENTASI: Dua Parameter Baru Sesuai Kontrak ML */}
               <NullableSlider field="frekuensi_olahraga_per_minggu" label="Frekuensi olahraga minggu ini" icon={Barbell} min={0} max={7} step={1} def={1} unit="Kali" />
               <NullableSlider field="jumlah_deadline_per_minggu" label="Jumlah tenggat waktu (deadline) minggu ini" icon={Target} min={0} max={15} step={1} def={2} unit="Tugas" />
 

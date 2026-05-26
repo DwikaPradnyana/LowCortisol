@@ -37,7 +37,9 @@ export default function Dashboard() {
         }
       } catch (error) {
         if (error.response?.status === 401) {
-          navigate("/auth");
+          localStorage.removeItem("token");
+          localStorage.removeItem("isOnboarded");
+          navigate("/auth", { replace: true });
         }
         setErrorMsg("Gagal memuat data dari server. Pastikan API berjalan.");
       } finally {
@@ -72,12 +74,10 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6 relative max-w-7xl mx-auto pb-10 px-4 sm:px-6 lg:px-8">
-      <style>{`@keyframes dotIn { from { opacity: 0; transform: scale(0.4); } to { opacity: 1; transform: scale(1); } }`}</style>
 
-      {/* HEADER SECTION (Tidak Diubah) */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-6 pt-6">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">
             Hi, {apiData?.user?.name || "User"}. <span className="text-muted-foreground/60 font-medium">How are you feeling today?</span>
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">Monitor your patterns and prevent exhaustion.</p>
@@ -94,7 +94,6 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-6 auto-rows-auto">
         
-        {/* CENTERPIECE: BURNOUT STATUS (Tidak Diubah) */}
         <GlassCard className="md:col-span-4 md:row-span-2 p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden">
           <div className={`absolute -right-20 -top-20 h-64 w-64 rounded-full blur-3xl opacity-20 pointer-events-none transition-colors duration-1000 ${curUI.glowOrb}`} />
           <div className="relative z-10 flex flex-col sm:flex-row sm:items-start justify-between gap-4">
@@ -133,7 +132,6 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* WEEKLY PATTERN (Tidak Diubah) */}
           <div className="relative z-10 mt-6 rounded-2xl border border-slate-200/50 bg-white/50 p-4 sm:p-5 shadow-sm">
             <div className="flex items-center justify-between mb-4">
               <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/80">Weekly Pattern</div>
@@ -162,7 +160,6 @@ export default function Dashboard() {
           </div>
         </GlassCard>
 
-        {/* REFINED: PERSONAL TRIGGER CARD (High Density Explainability) */}
         <GlassCard className="md:col-span-2 md:row-span-2 p-6 flex flex-col relative overflow-hidden bg-white/60">
           <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/80 mb-6 relative z-10 flex items-center justify-between">
             <span>Personal Trigger</span>
@@ -182,7 +179,6 @@ export default function Dashboard() {
                 </h3>
               </div>
               
-              {/* Factor Tags untuk membongkar akumulasi blackbox */}
               {apiData.personalInsight.factors && apiData.personalInsight.factors.length > 0 && (
                 <div className="flex flex-wrap gap-1.5 mb-4">
                   {apiData.personalInsight.factors.map((factor, idx) => (
@@ -211,7 +207,6 @@ export default function Dashboard() {
           )}
         </GlassCard>
 
-        {/* REFINED: TARGETED RECOMMENDATION CARD */}
         <GlassCard className="md:col-span-3 p-6 flex flex-col justify-center relative overflow-hidden bg-white/60">
           <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/80 mb-5">Recommended Action</div>
           
@@ -254,7 +249,6 @@ export default function Dashboard() {
           )}
         </GlassCard>
 
-        {/* ACTION REQUIRED / SYSTEM STATUS (Tidak Diubah) */}
         <GlassCard className="md:col-span-3 p-6 flex flex-col justify-between">
           <div>
             <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/80">System Status</div>

@@ -48,7 +48,7 @@ export default function Auth() {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("user_name", response.data.user.name);
         
-        localStorage.setItem("isOnboarded", String(response.data.user.isOnboarded));
+        localStorage.setItem("isOnboarded", String(response.data.user.onboarding_completed));
         
         navigate("/dashboard");
       } else {
@@ -83,7 +83,7 @@ export default function Auth() {
                 Take a breath.<br />You're in control.
               </h2>
               <p className="mt-4 max-w-sm text-muted-foreground leading-relaxed">
-                A safe place to notice how you're really doing — and adjust your pace before exhaustion sets in.
+                Tempat aman untuk memperhatikan kondisi Anda — dan penyesuaian sebelum kelelahan melanda.
               </p>
             </div>
           </div>
@@ -112,10 +112,10 @@ export default function Auth() {
 
         <div className="mb-6">
           <h3 className="text-2xl font-semibold text-foreground tracking-tight">
-            {tab === "signin" ? "Welcome back" : "Create your space"}
+            {tab === "signin" ? "Selamat datang kembali!" : "Buat akun baru untuk memulai"}
           </h3>
           <p className="mt-1.5 text-sm text-muted-foreground">
-            {tab === "signin" ? "We've kept your space ready." : "A gentle start to feeling better."}
+            {tab === "signin" ? "Kami telah menyiapkan tempat Anda." : "Awal yang lembut untuk merasa lebih baik."}
           </p>
         </div>
 

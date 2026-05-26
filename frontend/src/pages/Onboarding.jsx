@@ -98,6 +98,18 @@ export default function Onboarding() {
     { num: 3, title: "Health", icon: Heartbeat },
   ];
 
+  const departemenOptions = [
+    { value: 'Engineering', label: 'Engineering' },
+    { value: 'Hr', label: 'HR (Human Resources)' },
+    { value: 'Product', label: 'Product' },
+    { value: 'Data', label: 'Data' },
+    { value: 'Finance', label: 'Finance' },
+    { value: 'Sales', label: 'Sales' },
+    { value: 'Operations', label: 'Operations' },
+    { value: 'It', label: 'IT (Information Technology)' },
+    { value: 'Marketing', label: 'Marketing' }
+  ];
+
   return (
     <div className="flex min-h-[85vh] items-center justify-center p-4">
       <div className="w-full max-w-lg">
@@ -110,15 +122,12 @@ export default function Onboarding() {
             <div className="relative z-10 flex items-center justify-between">
                 {stepsConfig.map((s) => (
                     <div key={s.num} className="flex flex-col items-center gap-2">
-                        
                         <div className={`flex h-10 w-10 items-center justify-center rounded-full transition-all duration-500 ${ step >= s.num ? "bg-primary text-white shadow-md shadow-primary/30" : "bg-slate-200 text-slate-400" }`} >
                             <s.icon weight={step >= s.num ? "bold" : "regular"} className="h-5 w-5" />
                         </div>
-
                         <span className={`text-xs font-semibold ${ step >= s.num ? "text-foreground" : "text-muted-foreground" }`} >
                             {s.title}
                         </span>
-
                     </div>
                 ))}
             </div>
@@ -197,7 +206,7 @@ export default function Onboarding() {
                   <select name="departemen" value={formData.departemen} onChange={handleInputChange}
                     className="w-full rounded-xl border border-slate-200 bg-white/50 py-3 px-4 text-sm outline-none transition focus:border-primary cursor-pointer">
                     <option value="" disabled>Pilih bidang</option>
-                    {['Engineering', 'Hr', 'Product', 'Data', 'Finance', 'Sales', 'Operations', 'It', 'Marketing'].map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                    {departemenOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
                   </select>
                 </div>
 

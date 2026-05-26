@@ -88,6 +88,6 @@ exports.classifyBurnoutRisk = async (userProfile = {}, checkInPayload = {}) => {
       console.error("[ML Service Network Error]:", error.message);
     }
     
-    return 'Low'; 
+    throw new Error("AI_SERVICE_UNAVAILABLE");
   }
 };

@@ -14,6 +14,11 @@ import Auth from './pages/Auth';
 import Dashboard from './pages/Dashboard'; 
 import CheckIn from './pages/CheckIn';
 import Onboarding from './pages/Onboarding';
+import InsightsPrivate from './pages/InsightsPrivate';
+import History from './pages/History';
+import Recovery from './pages/Recovery';
+import Settings from './pages/Settings';
+import Help from './pages/Help';
 
 function App() {
   return (
@@ -34,7 +39,11 @@ function App() {
             <Route element={<AppLayout />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/dashboard/checkin" element={<CheckIn />} />
-              <Route path="/dashboard/insights" element={<div className="p-8">Insights Page</div>} />
+              <Route path="/dashboard/insights" element={<InsightsPrivate />} />
+              <Route path="/dashboard/recovery" element={<Recovery />} />
+              <Route path="/dashboard/history" element={<History />} />
+              <Route path="/dashboard/settings" element={<Settings />} />
+              <Route path="/dashboard/help" element={<Help />} />
             </Route>
 
           </Route>

@@ -12,7 +12,6 @@ export default function TopNavbar() {
   return (
     <nav className="sticky top-4 z-50 mx-auto mt-4 flex w-[95%] max-w-6xl items-center justify-between rounded-full border border-white/40 bg-white/40 px-6 py-3 backdrop-blur-2xl shadow-sm">
       
-      {/* Brand Logo */}
       <Link to="/" className="flex items-center gap-2 transition-transform hover:scale-105">
         <img 
           src={LogoIcon} 
@@ -24,7 +23,6 @@ export default function TopNavbar() {
         </span>
       </Link>
 
-      {/* Main Navigation (Desktop) */}
       <div className="hidden items-center gap-1 md:flex">
         {navItems.map((item) => (
           <NavLink
@@ -43,7 +41,6 @@ export default function TopNavbar() {
         ))}
       </div>
 
-      {/* Call to Action (Auth) */}
       <div className="flex items-center gap-3">        
         <Button to="/auth">
           Sign In
