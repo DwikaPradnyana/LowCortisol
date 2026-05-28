@@ -47,6 +47,7 @@ export default function Auth() {
       if (response.status === 'success' && response.data.token) {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("user_name", response.data.user.name);
+        localStorage.setItem("user_id", response.data.user._id);
         
         localStorage.setItem("isOnboarded", String(response.data.user.onboarding_completed));
         

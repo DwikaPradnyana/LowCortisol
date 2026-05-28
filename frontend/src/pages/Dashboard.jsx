@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  Sun, Warning, Flame, Briefcase, CalendarX, Wind, Coffee, Stack, Check, ArrowRight, Info, PlusCircle, CheckCircle, Sparkle, MoonStars, Brain
+  Briefcase, CalendarX, Wind, Coffee, Stack, Check, ArrowRight, Info, PlusCircle, CheckCircle, Sparkle, MoonStars, Brain
 } from "@phosphor-icons/react";
 import GlassCard from "../components/ui/GlassCard";
 import Button from "../components/ui/Button";
@@ -52,7 +52,7 @@ export default function Dashboard() {
   const curUI = RISK_UI[apiData?.todayStatus?.risk] || RISK_UI.Low;
 
   const renderIcon = (iconName, className) => {
-    const icons = { Briefcase, CalendarX, Wind, Coffee, Stack, MoonStars, Brain, Warning, Info, Check, Sparkle };
+    const icons = { Briefcase, CalendarX, Wind, Coffee, Stack, MoonStars, Brain, Info, Check, Sparkle };
     const IconComponent = icons[iconName] || Info;
     return <IconComponent weight="duotone" className={className} />;
   };

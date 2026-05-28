@@ -63,7 +63,7 @@ export default function History() {
   }
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto pb-10 pt-6">
+    <div className="space-y-6 max-w-5xl mx-auto pb-10 pt-6 px-6">
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-foreground">
           Historical Overview
