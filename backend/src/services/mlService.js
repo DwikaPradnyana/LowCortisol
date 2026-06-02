@@ -1,6 +1,8 @@
 const axios = require('axios');
 
-const ML_API_URL = process.env.ML_API_URL;
+const ML_API_URL =
+  process.env.ML_API_URL ||
+  "https://jikatakiri45-lowcortisol-api.hf.space/predict"
 
 if (!ML_API_URL) {
   throw new Error(
