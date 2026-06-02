@@ -50,7 +50,7 @@ export default function HowItWorks() {
           Cara kerja LowCortisol
         </div>
 
-        <h1 className="text-4xl font-bold leading-[1.15] tracking-tight text-foreground md:text-5xl">
+        <h1 className="text-3xl font-bold leading-[1.15] tracking-tight text-foreground sm:text-4xl md:text-5xl">
           Sistem sederhana untuk <br />
 
           <span className="bg-gradient-to-r from-primary to-teal-400 bg-clip-text text-transparent">
@@ -58,7 +58,7 @@ export default function HowItWorks() {
           </span>
         </h1>
 
-        <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
+        <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
           LowCortisol bekerja melalui check-in ringan harian,
           analisis pola perilaku, dan insight personal yang membantu
           kamu memahami kondisi diri sebelum stres berkembang menjadi burnout.

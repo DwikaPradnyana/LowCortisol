@@ -69,81 +69,83 @@ export default function Dashboard() {
   }
 
   if (errorMsg) {
-    return <div className="p-8 text-center text-red-500 font-medium bg-red-50 rounded-xl border border-red-200 mx-4 mt-8">{errorMsg}</div>;
+    return <div className="p-5 sm:p-8 text-center text-red-500 font-medium bg-red-50 rounded-xl border border-red-200 mx-4 mt-8">{errorMsg}</div>;
   }
 
   return (
-    <div className="space-y-6 relative max-w-7xl mx-auto pb-10 px-4 sm:px-6 lg:px-8">
+    <div className="space-y-5 sm:space-y-6 relative max-w-7xl mx-auto pb-10 px-0 sm:px-2 lg:px-8">
 
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-6 pt-6">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-4 sm:mb-6 pt-4 sm:pt-6">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">
-            Hi, {apiData?.user?.name || "User"}. <span className="text-muted-foreground/60 font-medium">How are you feeling today?</span>
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
+            Hi, {apiData?.user?.name || "User"}. <span className="text-muted-foreground/60 font-medium block sm:inline">How are you feeling today?</span>
           </h1>
-          <p className="mt-1 text-sm text-muted-foreground">Monitor your patterns and prevent exhaustion.</p>
+          <p className="mt-1 text-xs sm:text-sm text-muted-foreground">Monitor your patterns and prevent exhaustion.</p>
         </div>
         <button 
           onClick={() => navigate("/dashboard/checkin")}
           disabled={apiData?.hasCheckedInToday}
-          className="w-full md:w-auto bg-foreground hover:bg-foreground/90 text-background px-6 py-3 rounded-full font-medium transition-all shadow-md flex items-center justify-center gap-2 hover:-translate-y-0.5 disabled:opacity-50 disabled:hover:translate-y-0 disabled:cursor-not-allowed"
+          className="w-full md:w-auto bg-foreground hover:bg-foreground/90 text-background px-5 sm:px-6 py-2.5 sm:py-3 rounded-full text-sm sm:text-base font-medium transition-all shadow-md flex items-center justify-center gap-2 hover:-translate-y-0.5 disabled:opacity-50 disabled:hover:translate-y-0 disabled:cursor-not-allowed"
         >
-          {apiData?.hasCheckedInToday ? <Check weight="bold" className="h-5 w-5" /> : <PlusCircle weight="fill" className="h-5 w-5" />}
+          {apiData?.hasCheckedInToday ? <Check weight="bold" className="h-4 w-4 sm:h-5 sm:w-5" /> : <PlusCircle weight="fill" className="h-4 w-4 sm:h-5 sm:w-5" />}
           {apiData?.hasCheckedInToday ? "Routine Logged" : "Log Daily Routine"}
         </button>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-6 auto-rows-auto">
+      <div className="grid grid-cols-1 gap-5 sm:gap-6 md:grid-cols-6 auto-rows-auto">
         
-        <GlassCard className="md:col-span-4 md:row-span-2 p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden">
+        {/* PERBAIKAN: Padding responsif p-5 untuk mobile, p-8 untuk desktop */}
+        <GlassCard className="md:col-span-4 md:row-span-2 p-5 sm:p-8 flex flex-col justify-between relative overflow-hidden">
           <div className={`absolute -right-20 -top-20 h-64 w-64 rounded-full blur-3xl opacity-20 pointer-events-none transition-colors duration-1000 ${curUI.glowOrb}`} />
           <div className="relative z-10 flex flex-col sm:flex-row sm:items-start justify-between gap-4">
             <div>
-              <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/80">Current Status</div>
-              <h2 className={`mt-2 text-5xl md:text-6xl font-bold tracking-tighter leading-none bg-gradient-to-r ${curUI.gradientText} bg-clip-text text-transparent drop-shadow-sm`}>
+              <div className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground/80">Current Status</div>
+              {/* PERBAIKAN: Skalakan teks dari 4xl (mobile) agar tidak memotong layar */}
+              <h2 className={`mt-1 sm:mt-2 text-4xl sm:text-5xl md:text-6xl font-bold tracking-tighter leading-none bg-gradient-to-r ${curUI.gradientText} bg-clip-text text-transparent drop-shadow-sm`}>
                 {curUI.label}
               </h2>
             </div>
             {apiData?.hasCheckedInToday && (
-              <div className="inline-flex items-center self-start gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold bg-white/50 backdrop-blur-sm border-slate-200 text-slate-700">
-                <CheckCircle weight="fill" className="h-4 w-4 text-emerald-500" /> Logged Today
+              <div className="inline-flex items-center self-start gap-1.5 rounded-full border px-2.5 sm:px-3 py-1 sm:py-1.5 text-[10px] sm:text-xs font-semibold bg-white/50 backdrop-blur-sm border-slate-200 text-slate-700">
+                <CheckCircle weight="fill" className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-emerald-500" /> Logged Today
               </div>
             )}
           </div>
 
-          <div className="relative z-10 mt-8">
-            <div className="flex gap-2 rounded-2xl border border-slate-200/50 bg-slate-50/50 p-1.5 backdrop-blur-xl">
+          <div className="relative z-10 mt-6 sm:mt-8">
+            <div className="flex gap-1.5 sm:gap-2 rounded-2xl border border-slate-200/50 bg-slate-50/50 p-1.5 backdrop-blur-xl">
               {["Low", "Medium", "High"].map((level) => {
                 const isCurrent = apiData?.todayStatus?.risk === level;
                 const segUI = RISK_UI[level];
                 return (
-                  <div key={level} className={`flex-1 rounded-xl py-2.5 text-center transition-all duration-500 border ${isCurrent ? `${segUI.bgColor} ${segUI.borderColor} shadow-sm` : 'border-transparent bg-transparent'}`}>
-                    <span className={`text-[10px] sm:text-xs font-bold uppercase tracking-wider ${isCurrent ? segUI.textColor : 'text-slate-400'}`}>
+                  <div key={level} className={`flex-1 rounded-xl py-2 sm:py-2.5 px-1 text-center transition-all duration-500 border ${isCurrent ? `${segUI.bgColor} ${segUI.borderColor} shadow-sm` : 'border-transparent bg-transparent'}`}>
+                    <span className={`text-[9px] sm:text-xs font-bold uppercase tracking-wider ${isCurrent ? segUI.textColor : 'text-slate-400'}`}>
                       {level === "Medium" ? "MODERATE" : level}
                     </span>
                   </div>
                 );
               })}
             </div>
-            <div className="mt-6 flex items-start gap-3 bg-white/70 backdrop-blur-md p-4 rounded-2xl border border-white shadow-sm">
-              <Sparkle className={`h-5 w-5 mt-0.5 shrink-0 ${curUI.textColor}`} weight="fill" />
-              <p className="text-sm font-medium leading-relaxed text-foreground/80">
+            <div className="mt-4 sm:mt-6 flex items-start gap-2.5 sm:gap-3 bg-white/70 backdrop-blur-md p-3.5 sm:p-4 rounded-2xl border border-white shadow-sm">
+              <Sparkle className={`h-4 w-4 sm:h-5 sm:w-5 mt-0.5 shrink-0 ${curUI.textColor}`} weight="fill" />
+              <p className="text-xs sm:text-sm font-medium leading-relaxed text-foreground/80">
                 {apiData?.todayStatus?.insight || "Data belum cukup untuk memberikan insight. Silakan lakukan Check-in."}
               </p>
             </div>
           </div>
 
-          <div className="relative z-10 mt-6 rounded-2xl border border-slate-200/50 bg-white/50 p-4 sm:p-5 shadow-sm">
-            <div className="flex items-center justify-between mb-4">
-              <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/80">Weekly Pattern</div>
+          <div className="relative z-10 mt-5 sm:mt-6 rounded-2xl border border-slate-200/50 bg-white/50 p-3.5 sm:p-5 shadow-sm">
+            <div className="flex items-center justify-between mb-3 sm:mb-4">
+              <div className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground/80">Weekly Pattern</div>
             </div>
-            <div className="flex items-center justify-between px-1 sm:px-2">
+            <div className="flex items-center justify-between px-0.5 sm:px-2">
               {(apiData?.weeklyTrends || []).map((w, i) => {
                 const rUI = RISK_UI[w.r] || RISK_UI.Low;
                 const isToday = i === (apiData?.weeklyTrends?.length || 1) - 1;
                 return (
-                  <div key={i} className="group flex flex-col items-center gap-2 relative" onMouseEnter={() => setHoveredDay(i)} onMouseLeave={() => setHoveredDay(null)}>
-                    <div className="relative flex items-center justify-center h-6 w-6">
-                      <span className={`flex rounded-full border transition-all duration-300 ${isToday ? "h-5 w-5" : "h-3.5 w-3.5"}`}
+                  <div key={i} className="group flex flex-col items-center gap-1.5 sm:gap-2 relative" onMouseEnter={() => setHoveredDay(i)} onMouseLeave={() => setHoveredDay(null)}>
+                    <div className="relative flex items-center justify-center h-5 w-5 sm:h-6 sm:w-6">
+                      <span className={`flex rounded-full border transition-all duration-300 ${isToday ? "h-4 w-4 sm:h-5 sm:w-5" : "h-3 w-3 sm:h-3.5 sm:w-3.5"}`}
                         style={{
                           background: w.r === "None" ? "#e2e8f0" : `radial-gradient(circle at 30% 30%, white, ${rUI.hex})`,
                           borderColor: w.r === "None" ? "#cbd5e1" : `${rUI.hex}55`,
@@ -152,7 +154,7 @@ export default function Dashboard() {
                         }}
                       />
                     </div>
-                    <span className={`text-[10px] sm:text-[11px] font-semibold ${isToday ? "text-primary" : "text-muted-foreground/60"}`}>{w.d}</span>
+                    <span className={`text-[9px] sm:text-[11px] font-semibold ${isToday ? "text-primary" : "text-muted-foreground/60"}`}>{w.d}</span>
                   </div>
                 );
               })}
@@ -160,8 +162,9 @@ export default function Dashboard() {
           </div>
         </GlassCard>
 
-        <GlassCard className="md:col-span-2 md:row-span-2 p-6 flex flex-col relative overflow-hidden bg-white/60">
-          <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/80 mb-6 relative z-10 flex items-center justify-between">
+        {/* PERBAIKAN: Card sekunder menggunakan p-5 untuk mobile */}
+        <GlassCard className="md:col-span-2 md:row-span-2 p-5 sm:p-6 flex flex-col relative overflow-hidden bg-white/60">
+          <div className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground/80 mb-4 sm:mb-6 relative z-10 flex items-center justify-between">
             <span>Personal Trigger</span>
             {apiData?.hasCheckedInToday && (
               <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -170,94 +173,94 @@ export default function Dashboard() {
           
           {apiData?.hasCheckedInToday && apiData?.personalInsight ? (
             <div className="flex-1 flex flex-col relative z-10 animate-in fade-in">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-100 border border-slate-200">
-                  {renderIcon(apiData.personalInsight.iconType || "Info", "h-5 w-5 text-slate-700")}
+              <div className="flex items-center gap-3 mb-3 sm:mb-4">
+                <div className="flex h-8 w-8 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-xl bg-slate-100 border border-slate-200">
+                  {renderIcon(apiData.personalInsight.iconType || "Info", "h-4 w-4 sm:h-5 sm:w-5 text-slate-700")}
                 </div>
-                <h3 className="text-lg font-bold text-foreground leading-tight">
+                <h3 className="text-base sm:text-lg font-bold text-foreground leading-tight">
                   {apiData.personalInsight.title || "Insight Utama"}
                 </h3>
               </div>
               
               {apiData.personalInsight.factors && apiData.personalInsight.factors.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 mb-4">
+                <div className="flex flex-wrap gap-1.5 mb-3 sm:mb-4">
                   {apiData.personalInsight.factors.map((factor, idx) => (
-                    <span key={idx} className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-800 text-white shadow-sm">
+                    <span key={idx} className="inline-flex items-center px-2 py-0.5 rounded-md text-[9px] sm:text-[10px] font-semibold bg-slate-800 text-white shadow-sm">
                       {factor}
                     </span>
                   ))}
                 </div>
               )}
 
-              <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
-                <p className="text-sm font-medium text-slate-600 leading-relaxed">
+              <div className="p-3 sm:p-4 rounded-xl bg-slate-50 border border-slate-100 mt-auto">
+                <p className="text-xs sm:text-sm font-medium text-slate-600 leading-relaxed">
                   {apiData.personalInsight.description || "Data terkalibrasi."}
                 </p>
               </div>
             </div>
           ) : (
-            <div className="flex-1 flex flex-col opacity-60 pt-4">
-              <div className="h-10 w-10 border-2 border-dashed border-slate-300 rounded-xl mb-4" />
+            <div className="flex-1 flex flex-col opacity-60 pt-2 sm:pt-4">
+              <div className="h-8 w-8 sm:h-10 sm:w-10 border-2 border-dashed border-slate-300 rounded-xl mb-3 sm:mb-4" />
               <div className="space-y-2">
-                <div className="h-3 w-3/4 bg-slate-200 rounded animate-pulse" />
-                <div className="h-3 w-1/2 bg-slate-200 rounded animate-pulse" />
+                <div className="h-2.5 sm:h-3 w-3/4 bg-slate-200 rounded animate-pulse" />
+                <div className="h-2.5 sm:h-3 w-1/2 bg-slate-200 rounded animate-pulse" />
               </div>
-              <p className="mt-4 text-xs font-medium text-slate-500">Menunggu input harian untuk analisis.</p>
+              <p className="mt-3 sm:mt-4 text-[10px] sm:text-xs font-medium text-slate-500">Menunggu input harian untuk analisis.</p>
             </div>
           )}
         </GlassCard>
 
-        <GlassCard className="md:col-span-3 p-6 flex flex-col justify-center relative overflow-hidden bg-white/60">
-          <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/80 mb-5">Recommended Action</div>
+        <GlassCard className="md:col-span-3 p-5 sm:p-6 flex flex-col justify-center relative overflow-hidden bg-white/60">
+          <div className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground/80 mb-4 sm:mb-5">Recommended Action</div>
           
           {apiData?.hasCheckedInToday && apiData?.recommendation ? (
-            <div className="flex items-start gap-4 animate-in fade-in">
-              <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${curUI.bgColor} ${curUI.textColor} border ${curUI.borderColor}`}>
-                {renderIcon(apiData.recommendation.iconType || "Check", "h-6 w-6")}
+            <div className="flex items-start gap-3 sm:gap-4 animate-in fade-in">
+              <div className={`flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-xl ${curUI.bgColor} ${curUI.textColor} border ${curUI.borderColor}`}>
+                {renderIcon(apiData.recommendation.iconType || "Check", "h-5 w-5 sm:h-6 sm:w-6")}
               </div>
-              <div className="flex-1 pt-0.5">
-                <div className="flex justify-between items-start gap-2">
-                  <div>
-                    <h4 className="text-base font-bold text-foreground leading-none">{apiData.recommendation.title || "Tindakan Disarankan"}</h4>
+              <div className="flex-1 min-w-0">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-1 sm:gap-2">
+                  <div className="min-w-0">
+                    <h4 className="text-sm sm:text-base font-bold text-foreground leading-tight truncate">{apiData.recommendation.title || "Tindakan Disarankan"}</h4>
                     {apiData.recommendation.basis && (
-                      <span className="text-[10px] font-semibold text-muted-foreground mt-1 block">
+                      <span className="text-[9px] sm:text-[10px] font-semibold text-muted-foreground mt-0.5 sm:mt-1 block truncate">
                         Berdasarkan: {apiData.recommendation.basis}
                       </span>
                     )}
                   </div>
                   {apiData.recommendation.time && (
-                    <span className="text-[10px] font-bold uppercase tracking-wider bg-slate-100 border border-slate-200 text-slate-600 px-2.5 py-1 rounded-md whitespace-nowrap">
+                    <span className="self-start shrink-0 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-slate-100 border border-slate-200 text-slate-600 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md whitespace-nowrap">
                       {apiData.recommendation.time}
                     </span>
                   )}
                 </div>
-                <div className="mt-3 bg-white p-3.5 rounded-xl border border-slate-100 shadow-sm">
-                  <p className="text-sm font-medium text-slate-600 leading-relaxed">
+                <div className="mt-2.5 sm:mt-3 bg-white p-3 sm:p-3.5 rounded-xl border border-slate-100 shadow-sm">
+                  <p className="text-xs sm:text-sm font-medium text-slate-600 leading-relaxed">
                     {apiData.recommendation.description || "Sistem menyarankan penyesuaian rutinitas berdasarkan datamu."}
                   </p>
                 </div>
               </div>
             </div>
           ) : (
-            <div className="flex items-center gap-4 opacity-50 pt-1">
-              <div className="h-12 w-12 rounded-xl bg-slate-200" />
-              <div className="space-y-3 flex-1">
-                <div className="h-4 w-1/3 bg-slate-200 rounded-md" />
-                <div className="h-3 w-3/4 bg-slate-200 rounded-md" />
+            <div className="flex items-center gap-3 sm:gap-4 opacity-50 pt-1">
+              <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-slate-200" />
+              <div className="space-y-2 sm:space-y-3 flex-1">
+                <div className="h-3 sm:h-4 w-1/3 bg-slate-200 rounded-md" />
+                <div className="h-2.5 sm:h-3 w-3/4 bg-slate-200 rounded-md" />
               </div>
             </div>
           )}
         </GlassCard>
 
-        <GlassCard className="md:col-span-3 p-6 flex flex-col justify-between">
+        <GlassCard className="md:col-span-3 p-5 sm:p-6 flex flex-col justify-between">
           <div>
-            <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/80">System Status</div>
-            <h3 className="mt-1 text-lg font-semibold text-foreground">
+            <div className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground/80">System Status</div>
+            <h3 className="mt-1 text-base sm:text-lg font-semibold text-foreground">
               {apiData?.hasCheckedInToday ? "Routine Logged" : "Log your routine"}
             </h3>
-            <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+            <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed">
               {apiData?.hasCheckedInToday 
-                ? "Data hari ini telah dievaluasi secara deterministik berdasarkan heuristik operasional." 
+                ? "Data hari ini telah dievaluasi secara deterministik." 
                 : "Luangkan 15 detik untuk mencatat pola aktivitas dan pemulihanmu hari ini."}
             </p>
           </div>
@@ -265,12 +268,12 @@ export default function Dashboard() {
             onClick={() => navigate("/dashboard/checkin")}
             disabled={apiData?.hasCheckedInToday}
             size="lg" 
-            className={`mt-6 w-full transition-all duration-300 ${apiData?.hasCheckedInToday ? "bg-emerald-50 text-emerald-600 border border-emerald-200 shadow-none opacity-100 cursor-default hover:bg-emerald-50 hover:translate-y-0" : "bg-foreground text-background shadow-md shadow-primary/20"}`}
+            className={`mt-4 sm:mt-6 w-full py-2.5 sm:py-3 text-sm sm:text-base transition-all duration-300 ${apiData?.hasCheckedInToday ? "bg-emerald-50 text-emerald-600 border border-emerald-200 shadow-none opacity-100 cursor-default hover:bg-emerald-50 hover:translate-y-0" : "bg-foreground text-background shadow-md shadow-primary/20"}`}
           >
             {apiData?.hasCheckedInToday ? (
-              <><CheckCircle weight="fill" className="h-5 w-5 mr-2" /> Data Secured</>
+              <><CheckCircle weight="fill" className="h-4 w-4 sm:h-5 sm:w-5 mr-1.5 sm:mr-2" /> Data Secured</>
             ) : (
-              <>Start Full Check-in <ArrowRight weight="bold" className="h-4 w-4 ml-1" /></>
+              <>Start Full Check-in <ArrowRight weight="bold" className="h-3.5 w-3.5 sm:h-4 sm:w-4 ml-1" /></>
             )}
           </Button>
         </GlassCard>

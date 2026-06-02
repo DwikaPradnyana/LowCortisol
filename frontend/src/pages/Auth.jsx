@@ -65,7 +65,7 @@ export default function Auth() {
   };
 
   return (
-    <main className="mx-auto grid min-h-[calc(100vh-6rem)] w-[95%] max-w-6xl grid-cols-1 gap-8 pb-12 pt-8 md:grid-cols-2">
+    <main className="mx-auto grid min-h-[calc(100vh-6rem)] w-[95%] max-w-6xl grid-cols-1 gap-6 md:gap-8 pb-12 pt-4 md:pt-8 md:grid-cols-2">
       
       <div className="relative hidden h-full md:block">
         <GlassCard className="relative h-full overflow-hidden p-10 bg-gradient-to-br from-white/60 to-primary/5">
@@ -76,7 +76,7 @@ export default function Auth() {
 
           <div className="relative flex h-full flex-col justify-between z-10">
             <div className="flex items-center gap-2">
-              <img src={Logo} alt="" />
+              <img src={Logo} alt="" className="h-8 w-8 object-contain" />
               <span className="font-semibold text-lg text-foreground tracking-tight">LowCortisol</span>
             </div>
             <div>
@@ -91,7 +91,8 @@ export default function Auth() {
         </GlassCard>
       </div>
 
-      <GlassCard className="h-full p-8 md:p-10 shadow-lg">
+      {/* PERBAIKAN: Padding dinamis (p-6 di mobile, p-8/10 di layar besar) */}
+      <GlassCard className="h-full p-6 sm:p-8 md:p-10 shadow-lg flex flex-col justify-center">
         <div className="mb-8 flex rounded-full border border-slate-200 bg-slate-50/50 p-1 backdrop-blur-xl">
           {(["signin", "signup"]).map((t) => (
             <button
@@ -106,14 +107,14 @@ export default function Auth() {
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              {t === "signin" ? "Sign In" : "Create Account"}
+              {t === "signin" ? "Sign In" : "Sign Up"}
             </button>
           ))}
         </div>
 
         <div className="mb-6">
           <h3 className="text-2xl font-semibold text-foreground tracking-tight">
-            {tab === "signin" ? "Selamat datang kembali!" : "Buat akun baru untuk memulai"}
+            {tab === "signin" ? "Selamat datang kembali!" : "Buat akun baru"}
           </h3>
           <p className="mt-1.5 text-sm text-muted-foreground">
             {tab === "signin" ? "Kami telah menyiapkan tempat Anda." : "Awal yang lembut untuk merasa lebih baik."}
@@ -186,18 +187,10 @@ export default function Auth() {
             </div>
           )}
 
-          {tab === "signin" && (
-            <div className="flex justify-end pt-1">
-              <button type="button" className="text-xs font-medium text-primary hover:underline">
-                Forgot password?
-              </button>
-            </div>
-          )}
-
           <Button 
             type="submit" 
             size="lg" 
-            className="mt-4 w-full shadow-md shadow-primary/20"
+            className="mt-6 w-full shadow-md shadow-primary/20"
             disabled={isLoading}
           >
             {isLoading ? (
@@ -206,7 +199,7 @@ export default function Auth() {
                 Processing...
               </>
             ) : (
-              tab === "signin" ? "Sign In" : "Create Account"
+              tab === "signin" ? "Sign In" : "Sign Up"
             )}
           </Button>
         </form>

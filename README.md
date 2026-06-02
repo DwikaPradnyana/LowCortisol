@@ -8,13 +8,29 @@ Platform ini telah berevolusi dari simulasi burnout sederhana menjadi arsitektur
 
 # Core System Architecture
 
-LowCortisol terdiri dari 3 service utama yang berjalan secara paralel:
+LowCortisol beroperasi pada arsitektur *Microservices* yang terdesentralisasi (Decoupled Architecture), memisahkan beban kerja antarmuka, *database*, dan pemrosesan *Machine Learning*.
 
 | Layer       | Technology                          | Responsibility                |
 | ----------- | ----------------------------------- | ----------------------------- |
 | Frontend    | React + Vite + Tailwind CSS         | User Interface & Interaction  |
 | Backend API | Node.js + Express.js + MongoDB      | Authentication, API, Database |
 | ML Service  | FastAPI + TensorFlow + Scikit-Learn | Burnout Prediction Engine     |
+
+---
+
+# Production Architecture & Live Endpoints
+
+Sistem saat ini telah di-*deploy* secara penuh ke lingkungan produksi. Ketiga layanan ini terhubung secara otomatis di *Cloud*.
+
+| Service | Live URL / Endpoint | Platform Hosting |
+| :--- | :--- | :--- |
+| **Frontend (UI)** | [https://low-cortisol-six.vercel.app/](https://low-cortisol-six.vercel.app/) | Vercel |
+| **Backend API** | `https://lowcortisol-api.onrender.com/api` | Render.com |
+| **ML Inference** | `https://jikatakiri45-lowcortisol-api.hf.space/predict` | Hugging Face Spaces |
+
+**System Health Check:**
+Untuk memverifikasi apakah kontainer Backend sedang aktif (bangun dari *cold start*), akses endpoint berikut:
+`GET https://lowcortisol-api.onrender.com/api/health`
 
 ---
 
@@ -74,12 +90,13 @@ lowcortisol-monorepo/
 * Axios Authorization Interceptor
 * Insight Recommendation Engine
 * ML-Ready Dataset Pipeline
+* **Cloud Deployment & CORS Configuration**
 
 ---
 
-# System Requirements
+# System Requirements (Local Development)
 
-## Required Software
+Jika Anda ingin menjalankan sistem secara lokal untuk keperluan pengembangan:
 
 | Software              | Recommended Version |
 | --------------------- | ------------------- |
@@ -90,25 +107,9 @@ lowcortisol-monorepo/
 
 ---
 
-# Important System Architecture
+# Local Development Setup
 
-Untuk menjalankan website secara penuh, **SELURUH SERVICE WAJIB AKTIF SECARA BERSAMAAN**.
-
-| Service    | Port   |
-| ---------- | ------ |
-| Frontend   | `5173` |
-| Backend    | `5000` |
-| ML Service | `8000` |
-
-Jika salah satu service mati:
-
-* frontend tidak dapat request data,
-* backend gagal inference,
-* model ML tidak dapat melakukan prediksi.
-
----
-
-# Full Local Development Setup
+*Catatan: Karena ML Service telah di-deploy ke Hugging Face, pengembang lokal hanya perlu menjalankan Frontend dan Backend secara lokal.*
 
 ## 1. Clone Repository
 
@@ -119,192 +120,65 @@ cd lowcortisol-monorepo
 
 ---
 
-# 2. Backend Setup (Node.js API)
+## 2. Backend Setup (Node.js API)
 
-## Masuk ke folder backend
-
+Masuk ke folder backend:
 ```bash
 cd backend
-```
-
-## Install dependencies
-
-```bash
 npm install
 ```
 
-## Buat file `.env`
-
-Lokasi:
-
-```bash
-backend/.env
-```
-
-Isi:
-
+Buat file `.env` (Ganti value dengan kredensial Anda yang sah):
 ```env
-MONGO_URI=mongodb://lowcortisol_admin:cortisol2026@ac-aoljfse-shard-00-00.d54vbgb.mongodb.net:27017,ac-aoljfse-shard-00-01.d54vbgb.mongodb.net:27017,ac-aoljfse-shard-00-02.d54vbgb.mongodb.net:27017/lowcortisol_db?ssl=true&replicaSet=atlas-bvbye2-shard-0&authSource=admin&appName=LowCortisol
-
+MONGO_URI=mongodb+srv://<username>:<password>@<cluster-url>/<dbname>?retryWrites=true&w=majority
 PORT=5000
-
-JWT_SECRET='efc005e0dfd697b0b29f2c8de2824c6bdeee4dfd6d4c3ea34810ef0a537e68d87944ac8179cb78ef4b4e1f965de1c7fdd515c7b0257dafef0c7d59f4835292f4'
+JWT_SECRET=your_super_secret_jwt_key_here
+ML_API_URL=[https://jikatakiri45-lowcortisol-api.hf.space/predict](https://jikatakiri45-lowcortisol-api.hf.space/predict)
 ```
 
-## Jalankan backend
-
+Jalankan backend:
 ```bash
 npm run dev
 ```
 
-Expected output:
-
-```bash
-[SERVER] Aktif di http://localhost:5000
-[DATABASE] MongoDB Terkoneksi
-```
-
 ---
 
-# 3. Frontend Setup (React)
+## 3. Frontend Setup (React)
 
-## Buka terminal baru
-
-Masuk ke folder frontend:
-
+Buka terminal baru, masuk ke folder frontend:
 ```bash
 cd frontend
-```
-
-## Install dependencies
-
-```bash
 npm install
 ```
 
-## Jalankan frontend
+Buat file `.env` di folder frontend:
+```env
+VITE_API_URL=http://localhost:5000
+VITE_N8N_WEBHOOK_URL=your_n8n_webhook_url_here
+```
 
+Jalankan frontend:
 ```bash
 npm run dev
 ```
-
-Frontend akan berjalan di:
-
-```bash
-http://localhost:5173
-```
-
----
-
-# 4. ML Service Setup (FastAPI + TensorFlow)
-
-## Buka terminal ketiga
-
-Masuk ke folder ML Service:
-
-```bash
-cd ml-service
-```
-
----
-
-## Python Virtual Environment Setup
-
-### Buat virtual environment
-
-```bash
-python -m venv venv
-```
-
-### Aktifkan virtual environment
-
-#### Windows
-
-```bash
-venv\Scripts\activate
-```
-
-#### Mac/Linux
-
-```bash
-source venv/bin/activate
-```
-
----
-
-## Install dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
----
-
-## Buat file `.env`
-
-Lokasi:
-
-```bash
-ml-service/.env
-```
-
-Isi:
-
-```env
-MONGO_URI=mongodb://lowcortisol_admin:cortisol2026@ac-aoljfse-shard-00-00.d54vbgb.mongodb.net:27017,ac-aoljfse-shard-00-01.d54vbgb.mongodb.net:27017,ac-aoljfse-shard-00-02.d54vbgb.mongodb.net:27017/lowcortisol_db?ssl=true&replicaSet=atlas-bvbye2-shard-0&authSource=admin&appName=LowCortisol
-
-PORT=8000
-```
-
----
-
-## Jalankan ML Service
-
-```bash
-uvicorn app.main:app --reload
-```
-
-Expected output:
-
-```bash
-Uvicorn running on http://127.0.0.1:8000
-Application startup complete.
-```
-
----
-
-# Important Execution Flow
-
-Website hanya berjalan penuh jika:
-
-* ✅ Frontend aktif
-* ✅ Backend aktif
-* ✅ ML Service aktif
-
-Artinya harus ada:
-
-1. Terminal Frontend
-2. Terminal Backend
-3. Terminal ML Service
-
-secara bersamaan.
+Frontend akan berjalan di `http://localhost:5173`.
 
 ---
 
 # Full Runtime Architecture
 
 ```text
-React Frontend
+React Frontend (Vercel)
 ↓
-Node.js Backend API
+Node.js Backend API (Render)
 ↓
-FastAPI ML Service
+FastAPI ML Service (Hugging Face)
 ↓
 TensorFlow Model
 ↓
 Prediction Response
 ↓
-MongoDB Storage
+MongoDB Storage (Atlas)
 ↓
 Dashboard Rendering
 ```
@@ -351,11 +225,7 @@ Sistem onboarding mengumpulkan:
 * profil pekerjaan,
 * behavioral baseline.
 
-Semua field onboarding disimpan langsung pada model:
-
-```bash
-backend/src/models/User.js
-```
+Semua field onboarding disimpan langsung pada model: `backend/src/models/User.js`
 
 ---
 
@@ -369,10 +239,7 @@ Check-in harian mengumpulkan:
 * behavioral fatigue signal.
 
 Data dikirim dari:
-
-```text
-Frontend → Backend → ML Service → TensorFlow Model
-```
+`Frontend → Backend → ML Service → TensorFlow Model`
 
 ---
 
@@ -380,28 +247,20 @@ Frontend → Backend → ML Service → TensorFlow Model
 
 ## Backend ML Adapter
 
-Lokasi:
-
-```bash
-backend/src/services/mlService.js
-```
+Lokasi: `backend/src/services/mlService.js`
 
 Tugas:
 
 * membentuk payload,
 * validasi field,
 * fallback handling,
-* request ke FastAPI.
+* request eksternal ke FastAPI (Hugging Face).
 
 ---
 
 ## FastAPI Prediction Endpoint
 
-Endpoint:
-
-```http
-POST /predict
-```
+Endpoint: `POST /predict`
 
 FastAPI menerima:
 
@@ -429,13 +288,7 @@ FastAPI menerima:
 
 # Database Architecture
 
-MongoDB menggunakan database utama:
-
-```bash
-lowcortisol_db
-```
-
----
+MongoDB menggunakan database utama: `lowcortisol_db`
 
 # Main Collections
 
@@ -451,20 +304,10 @@ lowcortisol_db
 Field database wajib identik dengan field FastAPI.
 
 Contoh:
-
-```text
-jam_kerja_per_hari
-tingkat_stres
-beban_kerja_persepsi
-```
+`jam_kerja_per_hari`, `tingkat_stres`, `beban_kerja_persepsi`
 
 Tidak boleh diubah menjadi:
-
-```text
-workHours
-stressLevel
-workload
-```
+`workHours`, `stressLevel`, `workload`
 
 Karena akan merusak:
 
@@ -489,7 +332,7 @@ Karena akan merusak:
 
 # Security Notes
 
-File berikut TIDAK boleh diupload:
+File berikut **TIDAK BOLEH** diupload ke sistem Version Control (GitHub):
 
 ```text
 .env
@@ -497,43 +340,13 @@ venv/
 node_modules/
 ```
 
-Gunakan `.gitignore`.
-
----
-
-# Current Development Status
-
-## Completed
-
-* MERN Architecture
-* JWT Authentication
-* MongoDB Atlas Integration
-* FastAPI ML Integration
-* TensorFlow Burnout Prediction
-* Daily Check-In Pipeline
-* Reactive Dashboard
-* Insight Recommendation Engine
-* ML Contract Synchronization
-
----
-
-## In Progress
-
-* Historical Analytics
-* Trend Visualization
-* Recommendation Personalization
-* Time-Series Burnout Analysis
-* Deployment Infrastructure
-* Dockerization
-* CI/CD Pipeline
+Gunakan `.gitignore` untuk mengamankan kredensial sistem.
 
 ---
 
 # Engineering Direction
 
-LowCortisol tidak hanya berfokus pada visual dashboard.
-
-Platform ini dirancang untuk:
+LowCortisol tidak hanya berfokus pada visual dashboard. Platform ini dirancang untuk:
 
 * behavioral signal integrity,
 * machine-learning-ready datasets,
@@ -546,33 +359,3 @@ Tujuan jangka panjang:
 * proactive mental wellness monitoring,
 * behavioral recommendation system,
 * workplace psychological analytics.
-
----
-
-# Development Notes
-
-Jika terjadi error inference:
-
-Pastikan:
-
-* ✅ Backend aktif
-* ✅ ML Service aktif
-* ✅ Port 8000 berjalan
-* ✅ Model TensorFlow berhasil dimuat
-* ✅ `.env` sudah benar
-
----
-
-# Team Development Reminder
-
-Sebelum menjalankan project:
-
-WAJIB aktifkan:
-
-1. Frontend Terminal
-2. Backend Terminal
-3. ML Service Terminal
-
-Jika salah satu mati:
-
-sistem tidak berjalan penuh.
