@@ -1,6 +1,12 @@
 const axios = require('axios');
 
-const ML_API_URL = process.env.ML_API_URL || 'http://localhost:8000/predict';
+const ML_API_URL = process.env.ML_API_URL;
+
+if (!ML_API_URL) {
+  throw new Error(
+    "Missing ML_API_URL environment variable"
+  );
+}
 
 const DEFAULT_CATEGORIES = {
   JENIS_KELAMIN: "Laki-laki",

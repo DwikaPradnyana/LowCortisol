@@ -14,7 +14,6 @@ LowCortisol beroperasi pada arsitektur *Microservices* yang terdesentralisasi (D
 | ----------- | ----------------------------------- | ----------------------------- |
 | Frontend    | React + Vite + Tailwind CSS         | User Interface & Interaction  |
 | Backend API | Node.js + Express.js + MongoDB      | Authentication, API, Database |
-| ML Service  | FastAPI + TensorFlow + Scikit-Learn | Burnout Prediction Engine     |
 
 ---
 
@@ -26,7 +25,7 @@ Sistem saat ini telah di-*deploy* secara penuh ke lingkungan produksi. Ketiga la
 | :--- | :--- | :--- |
 | **Frontend (UI)** | [https://low-cortisol-six.vercel.app/](https://low-cortisol-six.vercel.app/) | Vercel |
 | **Backend API** | `https://lowcortisol-api.onrender.com/api` | Render.com |
-| **ML Inference** | `https://jikatakiri45-lowcortisol-api.hf.space/predict` | Hugging Face Spaces |
+| **AI Inference** | `https://jikatakiri45-lowcortisol-api.hf.space/predict` | Hugging Face Spaces |
 
 **System Health Check:**
 Untuk memverifikasi apakah kontainer Backend sedang aktif (bangun dari *cold start*), akses endpoint berikut:
@@ -46,7 +45,7 @@ lowcortisol-monorepo/
 │   │   ├── models/
 │   │   ├── routes/
 │   │   ├── services/
-│   │   └── utils/
+│   │   └── config/
 │   │
 │   ├── .env
 │   └── package.json
@@ -56,18 +55,10 @@ lowcortisol-monorepo/
 │   │   ├── components/
 │   │   ├── pages/
 │   │   ├── services/
-│   │   └── hooks/
+│   │   └── assets/
 │   │
-│   └── package.json
-│
-├── ml-service/
-│   ├── app/
-│   │   ├── models/
-│   │   └── main.py
-│   │
-│   ├── requirements.txt
 │   ├── .env
-│   └── venv/
+│   └── package.json
 │
 └── README.md
 ```
@@ -84,7 +75,7 @@ lowcortisol-monorepo/
 * User Onboarding System
 * Daily Behavioral Check-In
 * Reactive Dashboard
-* ML Inference Integration
+* AI Inference Integration
 * FastAPI Prediction Service
 * TensorFlow Burnout Classification
 * Axios Authorization Interceptor
@@ -133,7 +124,7 @@ Buat file `.env` (Ganti value dengan kredensial Anda yang sah):
 MONGO_URI=mongodb+srv://<username>:<password>@<cluster-url>/<dbname>?retryWrites=true&w=majority
 PORT=5000
 JWT_SECRET=your_super_secret_jwt_key_here
-ML_API_URL=[https://jikatakiri45-lowcortisol-api.hf.space/predict](https://jikatakiri45-lowcortisol-api.hf.space/predict)
+ML_API_URL=https://jikatakiri45-lowcortisol-api.hf.space/predict
 ```
 
 Jalankan backend:
@@ -154,7 +145,7 @@ npm install
 Buat file `.env` di folder frontend:
 ```env
 VITE_API_URL=http://localhost:5000
-VITE_N8N_WEBHOOK_URL=your_n8n_webhook_url_here
+VITE_N8N_WEBHOOK_URL=https://n8n-yy2qhejc326s.tomat.sumopod.my.id/webhook/lowcortisol-chat
 ```
 
 Jalankan frontend:
@@ -239,7 +230,7 @@ Check-in harian mengumpulkan:
 * behavioral fatigue signal.
 
 Data dikirim dari:
-`Frontend → Backend → ML Service → TensorFlow Model`
+`Frontend → Backend → AI Service → TensorFlow Model`
 
 ---
 
