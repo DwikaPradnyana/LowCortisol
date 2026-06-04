@@ -36,58 +36,80 @@ Sistem telah dideploy secara penuh ke lingkungan produksi. Ketiga layanan utama 
 
 Gunakan endpoint berikut untuk memeriksa status backend:
 
-```http
 GET https://lowcortisol-api.onrender.com/api/health
-```
 
 ---
 
 ## 📂 Monorepo Structure
 
-```text
+```
 lowcortisol-monorepo/
 │
 ├── DataScientist/        # Dataset, EDA, Analytics
 ├── ai-services/          # Model Training, Scaler, Encoder
-├── backend/              # Node.js REST API
-├── frontend/             # React Application
+├── backend/              # Node.js REST API, Mongoose Models
+├── frontend/             # React Application, UI Components
 ├── hugging-face/         # FastAPI Production Model
-├── .gitignore
-└── README.md
+├── .gitignore            # Security Filter
+└── README.md             # Documentation
 ```
 
 ---
 
 ## ⚙️ ML Integration Pipeline & Data Flow
 
-Sistem inferensi mengikuti alur data sebagai berikut:
-
 1. Pengguna mengirimkan 27 fitur perilaku melalui frontend (Daily Check-In).
-2. Backend menerima payload, melakukan validasi, lalu meneruskan request ke layanan ML.
+2. Backend menerima payload, melakukan validasi Mongoose, lalu meneruskan request ke layanan ML.
 3. FastAPI menerima payload dan menerapkan preprocessing menggunakan scaler dan encoder hasil training.
 4. Model TensorFlow menghasilkan klasifikasi risiko burnout beserta confidence score.
 5. Backend menyimpan hasil ke MongoDB Atlas.
-6. Frontend menampilkan hasil analitik, insight, dan rekomendasi pemulihan.
+6. Frontend menarik data terbaru untuk menampilkan hasil analitik, insight (XAI), dan rekomendasi pemulihan.
+
+---
+
+## 🌐 API Endpoints
+
+| Method | Endpoint                 | Description                             |
+| ------ | ------------------------ | --------------------------------------- |
+| POST   | `/api/auth/register`     | Registrasi akun pengguna baru           |
+| POST   | `/api/auth/login`        | Autentikasi pengguna dan penerbitan JWT |
+| PUT    | `/api/users/onboarding`  | Pengiriman data onboarding pengguna     |
+| GET    | `/api/users/profile`     | Mengambil profil pengguna aktif         |
+| GET    | `/api/dashboard`         | Mengambil data dashboard dan analitik   |
+| POST   | `/api/dashboard/checkin` | Mengirim data Daily Check-In ke AI      |
 
 ---
 
 ## 🔒 Security Protocol
 
-File konfigurasi sensitif tidak boleh dilacak oleh Git.
-
-Pastikan `.gitignore` mengecualikan:
+Pastikan `.gitignore` mengecualikan file berikut:
 
 * `.env`
 * `node_modules/`
 * `venv/`
 * `.venv/`
-* file model sementara atau cache training
+* cache training model
+* file sementara machine learning
 
 ---
 
 ## 🛠️ Local Development Setup
 
-### Backend Environment (`backend/.env`)
+### 1. Clone Repository
+
+```bash
+git clone <repository-url>
+cd lowcortisol-monorepo
+```
+
+### 2. Backend Initialization
+
+```bash
+cd backend
+npm install
+```
+
+Buat file `backend/.env`:
 
 ```env
 MONGO_URI=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/<db>
@@ -96,11 +118,44 @@ JWT_SECRET=<your_secret_key>
 ML_API_URL=https://jikatakiri45-lowcortisol-api.hf.space/predict
 ```
 
-### Frontend Environment (`frontend/.env`)
+Jalankan backend:
+
+```bash
+npm run dev
+```
+
+Backend akan berjalan pada:
+
+```text
+http://localhost:5000
+```
+
+### 3. Frontend Initialization
+
+```bash
+cd frontend
+npm install
+```
+
+Buat file `frontend/.env`:
 
 ```env
 VITE_API_URL=http://localhost:5000/api
 ```
+
+Jalankan frontend:
+
+```bash
+npm run dev
+```
+
+Frontend akan berjalan pada:
+
+```text
+http://localhost:5173
+```
+
+> ML Service tetap menggunakan endpoint Hugging Face Production agar pengembangan lokal tidak memerlukan instalasi TensorFlow secara penuh.
 
 ---
 
@@ -127,6 +182,7 @@ VITE_API_URL=http://localhost:5000/api
 * Vite
 * Tailwind CSS
 * Axios
+* Phosphor Icons
 
 ### Backend
 
@@ -134,14 +190,14 @@ VITE_API_URL=http://localhost:5000/api
 * Express.js
 * MongoDB Atlas
 * Mongoose
-* JWT Authentication
+* JSON Web Token (JWT)
 
 ### Machine Learning
 
 * TensorFlow / Keras
 * Scikit-Learn
 * FastAPI
-* Hugging Face Spaces
+* Uvicorn
 
 ### Deployment
 
