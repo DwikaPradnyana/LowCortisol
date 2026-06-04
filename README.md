@@ -2,351 +2,155 @@
 
 LowCortisol adalah platform berbasis **MERN Stack + FastAPI Machine Learning Service** yang dirancang untuk mengumpulkan sinyal perilaku dan psikologis harian pengguna sebagai fondasi *behavioral burnout analytics* berbasis Artificial Intelligence.
 
-Platform ini telah berevolusi dari simulasi burnout sederhana menjadi arsitektur **End-to-End Fullstack + ML Integration Pipeline**.
+Platform ini telah berevolusi dari eksperimen data menjadi arsitektur **End-to-End Fullstack + ML Integration Pipeline** yang terdesentralisasi secara penuh di lingkungan cloud.
 
 ---
 
-# Core System Architecture
+## 🏗️ Core System Architecture
 
-LowCortisol beroperasi pada arsitektur *Microservices* yang terdesentralisasi (Decoupled Architecture), memisahkan beban kerja antarmuka, *database*, dan pemrosesan *Machine Learning*.
+LowCortisol menggunakan arsitektur *Microservices* yang memisahkan beban kerja eksplorasi data, pelatihan model, antarmuka pengguna, operasi database, dan inferensi AI secara asinkron.
 
-| Layer       | Technology                          | Responsibility                |
-| ----------- | ----------------------------------- | ----------------------------- |
-| Frontend    | React + Vite + Tailwind CSS         | User Interface & Interaction  |
-| Backend API | Node.js + Express.js + MongoDB      | Authentication, API, Database |
+Sistem ini ditopang oleh lima pilar utama:
 
----
-
-# Production Architecture & Live Endpoints
-
-Sistem saat ini telah di-*deploy* secara penuh ke lingkungan produksi. Ketiga layanan ini terhubung secara otomatis di *Cloud*.
-
-| Service | Live URL / Endpoint | Platform Hosting |
-| :--- | :--- | :--- |
-| **Frontend (UI)** | [https://low-cortisol-six.vercel.app/](https://low-cortisol-six.vercel.app/) | Vercel |
-| **Backend API** | `https://lowcortisol-api.onrender.com/api` | Render.com |
-| **AI Inference** | `https://jikatakiri45-lowcortisol-api.hf.space/predict` | Hugging Face Spaces |
-
-**System Health Check:**
-Untuk memverifikasi apakah kontainer Backend sedang aktif (bangun dari *cold start*), akses endpoint berikut:
-`GET https://lowcortisol-api.onrender.com/api/health`
+| Modul Direktori  | Peran Bertanggung Jawab   | Deskripsi Tanggung Jawab                                                                                                    |
+| ---------------- | ------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `DataScientist/` | Data Scientist            | Pembersihan dataset mentah (Kaggle), Exploratory Data Analysis (EDA), dan standardisasi fitur perilaku (*Data Dictionary*). |
+| `ai-services/`   | Machine Learning Engineer | Training environment, eksperimen algoritma TensorFlow, penyusunan scaler, encoder, dan pembentukan model akhir.             |
+| `hugging-face/`  | Machine Learning Engineer | Lingkungan produksi FastAPI yang membungkus model terkompilasi untuk menerima request inferensi (*Prediction Endpoint*).    |
+| `backend/`       | Full Stack Developer      | REST API (Node.js/Express) untuk routing, autentikasi JWT, dan orkestrasi integrasi antara MongoDB dan ML Service.          |
+| `frontend/`      | Full Stack Developer      | User Interface (React/Tailwind) untuk Daily Check-In dan visualisasi dashboard analitik.                                    |
 
 ---
 
-# Repository Structure
+## 🚀 Production Architecture & Live Endpoints
 
-```bash
+Sistem telah dideploy secara penuh ke lingkungan produksi. Ketiga layanan utama saling terhubung dan dilindungi melalui kebijakan CORS.
+
+| Service          | URL / Endpoint                                        | Hosting             |
+| ---------------- | ----------------------------------------------------- | ------------------- |
+| Frontend         | https://low-cortisol-six.vercel.app/                  | Vercel              |
+| Backend API      | https://lowcortisol-api.onrender.com/api              | Render              |
+| ML Inference API | https://jikatakiri45-lowcortisol-api.hf.space/predict | Hugging Face Spaces |
+
+### System Health Check
+
+Gunakan endpoint berikut untuk memeriksa status backend:
+
+```http
+GET https://lowcortisol-api.onrender.com/api/health
+```
+
+---
+
+## 📂 Monorepo Structure
+
+```text
 lowcortisol-monorepo/
 │
-├── backend/
-│   ├── src/
-│   │   ├── controllers/
-│   │   ├── middlewares/
-│   │   ├── models/
-│   │   ├── routes/
-│   │   ├── services/
-│   │   └── config/
-│   │
-│   ├── .env
-│   └── package.json
-│
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── services/
-│   │   └── assets/
-│   │
-│   ├── .env
-│   └── package.json
-│
+├── DataScientist/        # Dataset, EDA, Analytics
+├── ai-services/          # Model Training, Scaler, Encoder
+├── backend/              # Node.js REST API
+├── frontend/             # React Application
+├── hugging-face/         # FastAPI Production Model
+├── .gitignore
 └── README.md
 ```
 
 ---
 
-# Current System Capabilities
+## ⚙️ ML Integration Pipeline & Data Flow
 
-## Completed Features
+Sistem inferensi mengikuti alur data sebagai berikut:
 
-* JWT Authentication
-* Protected Routes
-* MongoDB Atlas Integration
-* User Onboarding System
-* Daily Behavioral Check-In
-* Reactive Dashboard
-* AI Inference Integration
-* FastAPI Prediction Service
-* TensorFlow Burnout Classification
-* Axios Authorization Interceptor
-* Insight Recommendation Engine
-* ML-Ready Dataset Pipeline
-* **Cloud Deployment & CORS Configuration**
+1. Pengguna mengirimkan 27 fitur perilaku melalui frontend (Daily Check-In).
+2. Backend menerima payload, melakukan validasi, lalu meneruskan request ke layanan ML.
+3. FastAPI menerima payload dan menerapkan preprocessing menggunakan scaler dan encoder hasil training.
+4. Model TensorFlow menghasilkan klasifikasi risiko burnout beserta confidence score.
+5. Backend menyimpan hasil ke MongoDB Atlas.
+6. Frontend menampilkan hasil analitik, insight, dan rekomendasi pemulihan.
 
 ---
 
-# System Requirements (Local Development)
+## 🔒 Security Protocol
 
-Jika Anda ingin menjalankan sistem secara lokal untuk keperluan pengembangan:
+File konfigurasi sensitif tidak boleh dilacak oleh Git.
 
-| Software              | Recommended Version |
-| --------------------- | ------------------- |
-| Node.js               | v22.x LTS           |
-| Python                | 3.11+               |
-| Git                   | Latest              |
-| MongoDB Atlas Account | Required            |
+Pastikan `.gitignore` mengecualikan:
 
----
-
-# Local Development Setup
-
-*Catatan: Karena ML Service telah di-deploy ke Hugging Face, pengembang lokal hanya perlu menjalankan Frontend dan Backend secara lokal.*
-
-## 1. Clone Repository
-
-```bash
-git clone <repository-url>
-cd lowcortisol-monorepo
-```
+* `.env`
+* `node_modules/`
+* `venv/`
+* `.venv/`
+* file model sementara atau cache training
 
 ---
 
-## 2. Backend Setup (Node.js API)
+## 🛠️ Local Development Setup
 
-Masuk ke folder backend:
-```bash
-cd backend
-npm install
-```
+### Backend Environment (`backend/.env`)
 
-Buat file `.env` (Ganti value dengan kredensial Anda yang sah):
 ```env
-MONGO_URI=mongodb+srv://<username>:<password>@<cluster-url>/<dbname>?retryWrites=true&w=majority
+MONGO_URI=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/<db>
 PORT=5000
-JWT_SECRET=your_super_secret_jwt_key_here
+JWT_SECRET=<your_secret_key>
 ML_API_URL=https://jikatakiri45-lowcortisol-api.hf.space/predict
 ```
 
-Jalankan backend:
-```bash
-npm run dev
-```
+### Frontend Environment (`frontend/.env`)
 
----
-
-## 3. Frontend Setup (React)
-
-Buka terminal baru, masuk ke folder frontend:
-```bash
-cd frontend
-npm install
-```
-
-Buat file `.env` di folder frontend:
 ```env
-VITE_API_URL=http://localhost:5000
-VITE_N8N_WEBHOOK_URL=https://n8n-yy2qhejc326s.tomat.sumopod.my.id/webhook/lowcortisol-chat
-```
-
-Jalankan frontend:
-```bash
-npm run dev
-```
-Frontend akan berjalan di `http://localhost:5173`.
-
----
-
-# Full Runtime Architecture
-
-```text
-React Frontend (Vercel)
-↓
-Node.js Backend API (Render)
-↓
-FastAPI ML Service (Hugging Face)
-↓
-TensorFlow Model
-↓
-Prediction Response
-↓
-MongoDB Storage (Atlas)
-↓
-Dashboard Rendering
+VITE_API_URL=http://localhost:5000/api
 ```
 
 ---
 
-# Authentication Flow
+## 📊 Current System Capabilities
 
-## Register
-
-```http
-POST /api/auth/register
-```
-
-Flow:
-
-* User dibuat di MongoDB
-* JWT dibuat
-* Session disimpan ke localStorage
-* User diarahkan ke onboarding
+* Decentralized Deployment Architecture
+* Behavioral Burnout Prediction
+* Explainable AI (XAI) Insights
+* Recovery Protocol Recommendation Engine
+* MongoDB Atlas Integration
+* JWT Authentication & Authorization
+* RESTful API Architecture
+* React-Based Interactive Dashboard
+* TensorFlow-Based Machine Learning Inference
+* Cross-Service Communication via FastAPI
 
 ---
 
-## Login
+## 🧑‍💻 Technology Stack
 
-```http
-POST /api/auth/login
-```
+### Frontend
 
-Flow:
+* React
+* Vite
+* Tailwind CSS
+* Axios
 
-* JWT diverifikasi
-* Axios interceptor menyisipkan bearer token otomatis
-* Protected routes diaktifkan
-* Dashboard sinkronisasi otomatis
+### Backend
 
----
+* Node.js
+* Express.js
+* MongoDB Atlas
+* Mongoose
+* JWT Authentication
 
-# User Onboarding Architecture
+### Machine Learning
 
-Sistem onboarding mengumpulkan:
+* TensorFlow / Keras
+* Scikit-Learn
+* FastAPI
+* Hugging Face Spaces
 
-* data demografi,
-* profil pekerjaan,
-* behavioral baseline.
+### Deployment
 
-Semua field onboarding disimpan langsung pada model: `backend/src/models/User.js`
-
----
-
-# Daily Check-In Architecture
-
-Check-in harian mengumpulkan:
-
-* workload signal,
-* stress signal,
-* recovery signal,
-* behavioral fatigue signal.
-
-Data dikirim dari:
-`Frontend → Backend → AI Service → TensorFlow Model`
+* Vercel
+* Render
+* Hugging Face Spaces
 
 ---
 
-# ML Integration Pipeline
+## 📄 License
 
-## Backend ML Adapter
-
-Lokasi: `backend/src/services/mlService.js`
-
-Tugas:
-
-* membentuk payload,
-* validasi field,
-* fallback handling,
-* request eksternal ke FastAPI (Hugging Face).
-
----
-
-## FastAPI Prediction Endpoint
-
-Endpoint: `POST /predict`
-
-FastAPI menerima:
-
-* 27 fitur perilaku,
-* preprocessing,
-* encoding,
-* scaling,
-* inference TensorFlow.
-
----
-
-## ML Output Example
-
-```json
-{
-  "status": "success",
-  "results": {
-    "prediksi_level": "Medium",
-    "kepastian_ai": "56.79%"
-  }
-}
-```
-
----
-
-# Database Architecture
-
-MongoDB menggunakan database utama: `lowcortisol_db`
-
-# Main Collections
-
-| Collection | Purpose                     |
-| ---------- | --------------------------- |
-| users      | Authentication + onboarding |
-| checkins   | Daily behavioral signals    |
-
----
-
-# Mongoose Contract Lock
-
-Field database wajib identik dengan field FastAPI.
-
-Contoh:
-`jam_kerja_per_hari`, `tingkat_stres`, `beban_kerja_persepsi`
-
-Tidak boleh diubah menjadi:
-`workHours`, `stressLevel`, `workload`
-
-Karena akan merusak:
-
-* OneHotEncoder
-* preprocessing pipeline
-* ML inference contract
-
----
-
-# API Endpoints
-
-| Method | Endpoint                 | Description           |
-| ------ | ------------------------ | --------------------- |
-| POST   | `/api/auth/register`     | Register              |
-| POST   | `/api/auth/login`        | Login                 |
-| PUT    | `/api/users/onboarding`  | Submit onboarding     |
-| GET    | `/api/users/profile`     | User profile          |
-| GET    | `/api/dashboard`         | Dashboard aggregation |
-| POST   | `/api/dashboard/checkin` | Submit check-in       |
-
----
-
-# Security Notes
-
-File berikut **TIDAK BOLEH** diupload ke sistem Version Control (GitHub):
-
-```text
-.env
-venv/
-node_modules/
-```
-
-Gunakan `.gitignore` untuk mengamankan kredensial sistem.
-
----
-
-# Engineering Direction
-
-LowCortisol tidak hanya berfokus pada visual dashboard. Platform ini dirancang untuk:
-
-* behavioral signal integrity,
-* machine-learning-ready datasets,
-* scalable wellness analytics,
-* burnout prediction infrastructure.
-
-Tujuan jangka panjang:
-
-* burnout prediction,
-* proactive mental wellness monitoring,
-* behavioral recommendation system,
-* workplace psychological analytics.
+This project is developed for educational, research, and workplace wellness analytics purposes.
